@@ -119,38 +119,42 @@
                  <div class="space-y-6 pt-4">
                      <div>
                          <div class="flex justify-between items-center mb-2">
-                             <label class="text-lg font-semibold text-white">📡 API Usage & Integration (Score 1-10)</label>
+                             <label class="text-lg font-semibold text-white">📡 API Usage & Integration (Score 1-10) *</label>
                              <span id="api-usage-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
                          </div>
                          <p class="text-sm text-indigo-300 mb-2">How well did the team utilize the provided APIs? Was the integration seamless, creative, and core to the project's function?</p>
-                         <input type="range" id="api-usage" name="Number1" min="1" max="10" value="5" class="slider-track slider-thumb">
+                         <input type="range" id="api-usage-slider" min="1" max="10" value="5" class="slider-track slider-thumb">
+                         <input type="hidden" id="api-usage-input" name="Number1" value="5" required>
                      </div>
 
                      <div>
                          <div class="flex justify-between items-center mb-2">
-                             <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution (Score 1-10)</label>
+                             <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution (Score 1-10) *</label>
                              <span id="complexity-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
                          </div>
                          <p class="text-sm text-indigo-300 mb-2">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
-                         <input type="range" id="complexity" name="Number2" min="1" max="10" value="5" class="slider-track slider-thumb">
+                         <input type="range" id="complexity-slider" min="1" max="10" value="5" class="slider-track slider-thumb">
+                         <input type="hidden" id="complexity-input" name="Number2" value="5" required>
                      </div>
 
                      <div>
                          <div class="flex justify-between items-center mb-2">
-                             <label class="text-lg font-semibold text-white">✅ Functionality & Reliability (Score 1-10)</label>
+                             <label class="text-lg font-semibold text-white">✅ Functionality & Reliability (Score 1-10) *</label>
                              <span id="functionality-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
                          </div>
                          <p class="text-sm text-indigo-300 mb-2">Does the application work as demonstrated? Is it stable, performant, and free of significant bugs?</p>
-                         <input type="range" id="functionality" name="Number3" min="1" max="10" value="5" class="slider-track slider-thumb">
+                         <input type="range" id="functionality-slider" min="1" max="10" value="5" class="slider-track slider-thumb">
+                         <input type="hidden" id="functionality-input" name="Number3" value="5" required>
                      </div>
 
                      <div>
                          <div class="flex justify-between items-center mb-2">
-                             <label class="text-lg font-semibold text-white">💡 Innovation & Originality (Score 1-10)</label>
+                             <label class="text-lg font-semibold text-white">💡 Innovation & Originality (Score 1-10) *</label>
                              <span id="innovation-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
                          </div>
                          <p class="text-sm text-indigo-300 mb-2">How novel is the project concept? Does it offer a new solution or a fresh perspective on the hackathon theme?</p>
-                         <input type="range" id="innovation" name="Number4" min="1" max="10" value="5" class="slider-track slider-thumb">
+                         <input type="range" id="innovation-slider" min="1" max="10" value="5" class="slider-track slider-thumb">
+                         <input type="hidden" id="innovation-input" name="Number4" value="5" required>
                      </div>
                  </div>
 
@@ -174,28 +178,34 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Logic to update the score display next to the slider
+            // Define the relationships between the UI elements and the form fields
             const sliders = [
-                { input: 'api-usage', output: 'api-usage-value' },
-                { input: 'complexity', output: 'complexity-value' },
-                { input: 'functionality', output: 'functionality-value' },
-                { input: 'innovation', output: 'innovation-value' }
+                { sliderId: 'api-usage-slider', outputId: 'api-usage-value', inputId: 'api-usage-input' },
+                { sliderId: 'complexity-slider', outputId: 'complexity-value', inputId: 'complexity-input' },
+                { sliderId: 'functionality-slider', outputId: 'functionality-value', inputId: 'functionality-input' },
+                { sliderId: 'innovation-slider', outputId: 'innovation-value', inputId: 'innovation-input' }
             ];
 
-            sliders.forEach(slider => {
-                const inputElement = document.getElementById(slider.input);
-                const outputElement = document.getElementById(slider.output);
+            sliders.forEach(sliderConfig => {
+                const sliderElement = document.getElementById(sliderConfig.sliderId);
+                const outputElement = document.getElementById(sliderConfig.outputId);
+                const inputElement = document.getElementById(sliderConfig.inputId);
                 
-                // Initialize display value based on default value
-                outputElement.textContent = inputElement.value;
+                // Function to update all related elements
+                const updateScore = () => {
+                    const value = sliderElement.value;
+                    // 1. Update the visual display (span)
+                    outputElement.textContent = value;
+                    // 2. Update the hidden input's value for form submission
+                    inputElement.value = value;
+                };
 
-                // Update display value on input change
-                inputElement.addEventListener('input', () => {
-                    outputElement.textContent = inputElement.value;
-                });
+                // Initialize display and hidden input value based on default slider value
+                updateScore();
+
+                // Update display and hidden input value on slider movement
+                sliderElement.addEventListener('input', updateScore);
             });
-            
-            // Note: The form now relies entirely on the browser submitting data to the Zoho 'action' URL.
         });
     </script>
 </body>
