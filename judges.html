@@ -48,9 +48,25 @@
         .btn-primary {
             border: none !important;
         }
+        /* Custom style for the glass effect on the card */
+        .glass-card {
+            background-color: rgba(30, 27, 75, 0.8); /* Semi-transparent darker indigo */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Custom style for form inputs to match the theme */
+        .form-input {
+            background-color: #312e81; /* Indigo-800 */
+            border: 1px solid #4f46e5; /* Indigo-600 */
+            color: #eef2ff; /* Indigo-100 */
+        }
+        .form-input::placeholder {
+            color: #9ca3af; /* Gray-400 */
+        }
     </style>
 </head>
-<body class="text-indigo-100">
+<body class="bg-gray-900 text-indigo-100 min-h-screen">
 
     <header class="text-center py-16 px-4">
         <h1 class="font-orbitron text-5xl md:text-6xl font-bold uppercase tracking-widest text-white glow-text">Technical Judging</h1>
@@ -71,74 +87,84 @@
                    enctype='multipart/form-data' 
                    class="space-y-8">
 
-                <input type="hidden" name="zf_referrer_name" value="">
-                <input type="hidden" name="zf_redirect_url" value="https://galacticarchives.space/judges.html">
-                <input type="hidden" name="zc_gad" value="">
+                 <input type="hidden" name="zf_referrer_name" value="">
+                 <input type="hidden" name="zf_redirect_url" value="https://galacticarchives.space/judges.html">
+                 <input type="hidden" name="zc_gad" value="">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="project-name" class="block text-md font-medium text-indigo-300 mb-2">Project / Team Name</label>
-                        <input type="text" id="project-name" name="SingleLine" required maxlength="255" placeholder="Team A - Project X" class="form-input w-full px-4 py-2 rounded-lg text-lg"/>
-                    </div>
-                    
-                    <div>
-                        <label for="judge-first-name" class="block text-md font-medium text-indigo-300 mb-2">Judge's Name</label>
-                        <div class="flex space-x-2">
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div>
+                         <label for="judge-name" class="block text-md font-medium text-indigo-300 mb-2">Judge's Name *</label>
+                         <div class="flex space-x-2">
                              <input type="text" id="judge-first-name" name="Name_First" required class="form-input w-1/2 px-4 py-2 rounded-lg text-lg" placeholder="First Name">
                              <input type="text" id="judge-last-name" name="Name_Last" required class="form-input w-1/2 px-4 py-2 rounded-lg text-lg" placeholder="Last Name">
-                        </div>
-                    </div>
-                </div>
+                         </div>
+                     </div>
+                     
+                     <div>
+                         <label for="project-name" class="block text-md font-medium text-indigo-300 mb-2">Project / Team Name *</label>
+                         <input type="text" id="project-name" name="SingleLine" required maxlength="255" placeholder="Team A - Project X" class="form-input w-full px-4 py-2 rounded-lg text-lg"/>
+                     </div>
 
-                <div class="space-y-6 pt-4">
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-lg font-semibold text-white">📡 API Usage & Integration</label>
-                            <span id="api-usage-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
-                        </div>
-                        <p class="text-sm text-indigo-300 mb-2">How well did the team utilize the provided APIs? Was the integration seamless, creative, and core to the project's function?</p>
-                        <input type="range" id="api-usage" name="Number1" min="1" max="10" value="5" class="slider-track slider-thumb">
-                    </div>
+                     <div class="md:col-span-2">
+                        <label for="technical-track" class="block text-md font-medium text-indigo-300 mb-2">Technical Track</label>
+                        <select id="technical-track" name="Dropdown" class="form-input w-full px-4 py-2 rounded-lg text-lg appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\' fill=\'%23a78bfa\'%3e%3cpath d=\'M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z\' clip-rule=\'evenodd\' fill-rule=\'evenodd\'/%3e%3c/svg%3e\')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1.5em_1.5em] cursor-pointer">
+                            <option value="-Select-" selected="true">-Select-</option>
+                            <option value="The Alien Artifacts Division">The Alien Artifacts Division</option>
+                            <option value="The Astrogator&#39;s AI">The Astrogator's AI</option>
+                            <option value="The Celestial Cartographer">The Celestial Cartographer</option>
+                        </select>
+                     </div>
+                 </div>
 
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution</label>
-                            <span id="complexity-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
-                        </div>
-                        <p class="text-sm text-indigo-300 mb-2">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
-                        <input type="range" id="complexity" name="Number2" min="1" max="10" value="5" class="slider-track slider-thumb">
-                    </div>
+                 <div class="space-y-6 pt-4">
+                     <div>
+                         <div class="flex justify-between items-center mb-2">
+                             <label class="text-lg font-semibold text-white">📡 API Usage & Integration (Score 1-10)</label>
+                             <span id="api-usage-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                         </div>
+                         <p class="text-sm text-indigo-300 mb-2">How well did the team utilize the provided APIs? Was the integration seamless, creative, and core to the project's function?</p>
+                         <input type="range" id="api-usage" name="Number1" min="1" max="10" value="5" class="slider-track slider-thumb">
+                     </div>
 
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-lg font-semibold text-white">✅ Functionality & Reliability</label>
-                            <span id="functionality-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
-                        </div>
-                        <p class="text-sm text-indigo-300 mb-2">Does the application work as demonstrated? Is it stable, performant, and free of significant bugs?</p>
-                        <input type="range" id="functionality" name="Number3" min="1" max="10" value="5" class="slider-track slider-thumb">
-                    </div>
+                     <div>
+                         <div class="flex justify-between items-center mb-2">
+                             <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution (Score 1-10)</label>
+                             <span id="complexity-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                         </div>
+                         <p class="text-sm text-indigo-300 mb-2">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
+                         <input type="range" id="complexity" name="Number2" min="1" max="10" value="5" class="slider-track slider-thumb">
+                     </div>
 
-                    <div>
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-lg font-semibold text-white">💡 Innovation & Originality</label>
-                            <span id="innovation-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
-                        </div>
-                        <p class="text-sm text-indigo-300 mb-2">How novel is the project concept? Does it offer a new solution or a fresh perspective on the hackathon theme?</p>
-                        <input type="range" id="innovation" name="Number4" min="1" max="10" value="5" class="slider-track slider-thumb">
-                    </div>
-                </div>
+                     <div>
+                         <div class="flex justify-between items-center mb-2">
+                             <label class="text-lg font-semibold text-white">✅ Functionality & Reliability (Score 1-10)</label>
+                             <span id="functionality-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                         </div>
+                         <p class="text-sm text-indigo-300 mb-2">Does the application work as demonstrated? Is it stable, performant, and free of significant bugs?</p>
+                         <input type="range" id="functionality" name="Number3" min="1" max="10" value="5" class="slider-track slider-thumb">
+                     </div>
 
-                <div>
-                    <label for="comments" class="block text-lg font-medium text-white mb-2">Technical Feedback & Comments</label>
-                    <textarea id="comments" name="MultiLine" rows="5" class="form-input w-full px-4 py-2 rounded-lg" placeholder="Provide detailed technical feedback. What was impressive? What could be improved?"></textarea>
-                </div>
+                     <div>
+                         <div class="flex justify-between items-center mb-2">
+                             <label class="text-lg font-semibold text-white">💡 Innovation & Originality (Score 1-10)</label>
+                             <span id="innovation-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                         </div>
+                         <p class="text-sm text-indigo-300 mb-2">How novel is the project concept? Does it offer a new solution or a fresh perspective on the hackathon theme?</p>
+                         <input type="range" id="innovation" name="Number4" min="1" max="10" value="5" class="slider-track slider-thumb">
+                     </div>
+                 </div>
 
-                <div class="pt-4">
-                    <button type="submit" id="submit-button" class="btn-primary w-full text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider">
-                        Submit Final Score
-                    </button>
-                </div>
-            </form>
+                 <div>
+                     <label for="comments" class="block text-lg font-medium text-white mb-2">Technical Feedback & Comments *</label>
+                     <textarea id="comments" name="MultiLine" rows="5" required class="form-input w-full px-4 py-2 rounded-lg" placeholder="Provide detailed technical feedback. What was impressive? What could be improved?"></textarea>
+                 </div>
+
+                 <div class="pt-4">
+                     <button type="submit" id="submit-button" class="btn-primary w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider transition duration-300 ease-in-out">
+                         Submit Final Score
+                     </button>
+                 </div>
+             </form>
             </div>
     </main>
 
