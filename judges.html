@@ -44,6 +44,10 @@
             cursor: pointer;
             border: 2px solid #d1d5db;
         }
+        /* Override Tailwind and ensure the button looks right */
+        .btn-primary {
+            border: none !important;
+        }
     </style>
 </head>
 <body class="text-indigo-100">
@@ -56,19 +60,33 @@
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 pb-24">
         <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl max-w-4xl mx-auto">
              <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-white font-orbitron">Submission Scorecard</h2>
-                <p class="text-indigo-300 mt-2">Evaluate the project's technical merit based on the criteria below (1-10).</p>
-            </div>
+                 <h2 class="text-3xl font-bold text-white font-orbitron">Submission Scorecard</h2>
+                 <p class="text-indigo-300 mt-2">Evaluate the project's technical merit based on the criteria below (1-10).</p>
+             </div>
 
-            <form id="judging-form" class="space-y-8">
+             <form id="judging-form" 
+                   action='https://forms.zohopublic.eu/galacticarchives1/form/JudgingForm/formperma/G-KlDYID4dHa3IChs7_V85L5E906htpMAPxlTv1eeYA/htmlRecords/submit' 
+                   method='POST' 
+                   accept-charset='UTF-8' 
+                   enctype='multipart/form-data' 
+                   class="space-y-8">
+
+                <input type="hidden" name="zf_referrer_name" value="">
+                <input type="hidden" name="zf_redirect_url" value="https://galacticarchives.space/judges.html">
+                <input type="hidden" name="zc_gad" value="">
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="project-name" class="block text-md font-medium text-indigo-300 mb-2">Project / Team Name</label>
-                        <input type="text" id="project-name" name="projectName" required class="form-input w-full px-4 py-2 rounded-lg text-lg" placeholder="e.g., StarSailor AI">
+                        <input type="text" id="project-name" name="SingleLine" required maxlength="255" placeholder="Team A - Project X" class="form-input w-full px-4 py-2 rounded-lg text-lg"/>
                     </div>
+                    
                     <div>
-                        <label for="judge-name" class="block text-md font-medium text-indigo-300 mb-2">Judge's Name</label>
-                        <input type="text" id="judge-name" name="judgeName" required class="form-input w-full px-4 py-2 rounded-lg text-lg" placeholder="Your name">
+                        <label for="judge-first-name" class="block text-md font-medium text-indigo-300 mb-2">Judge's Name</label>
+                        <div class="flex space-x-2">
+                             <input type="text" id="judge-first-name" name="Name_First" required class="form-input w-1/2 px-4 py-2 rounded-lg text-lg" placeholder="First Name">
+                             <input type="text" id="judge-last-name" name="Name_Last" required class="form-input w-1/2 px-4 py-2 rounded-lg text-lg" placeholder="Last Name">
+                        </div>
                     </div>
                 </div>
 
@@ -79,7 +97,7 @@
                             <span id="api-usage-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
                         </div>
                         <p class="text-sm text-indigo-300 mb-2">How well did the team utilize the provided APIs? Was the integration seamless, creative, and core to the project's function?</p>
-                        <input type="range" id="api-usage" name="apiUsage" min="1" max="10" value="5" class="slider-track slider-thumb">
+                        <input type="range" id="api-usage" name="Number1" min="1" max="10" value="5" class="slider-track slider-thumb">
                     </div>
 
                     <div>
@@ -87,8 +105,8 @@
                             <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution</label>
                             <span id="complexity-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
                         </div>
-                         <p class="text-sm text-indigo-300 mb-2">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
-                        <input type="range" id="complexity" name="complexity" min="1" max="10" value="5" class="slider-track slider-thumb">
+                        <p class="text-sm text-indigo-300 mb-2">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
+                        <input type="range" id="complexity" name="Number2" min="1" max="10" value="5" class="slider-track slider-thumb">
                     </div>
 
                     <div>
@@ -97,22 +115,22 @@
                             <span id="functionality-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
                         </div>
                         <p class="text-sm text-indigo-300 mb-2">Does the application work as demonstrated? Is it stable, performant, and free of significant bugs?</p>
-                        <input type="range" id="functionality" name="functionality" min="1" max="10" value="5" class="slider-track slider-thumb">
+                        <input type="range" id="functionality" name="Number3" min="1" max="10" value="5" class="slider-track slider-thumb">
                     </div>
 
-                     <div>
+                    <div>
                         <div class="flex justify-between items-center mb-2">
                             <label class="text-lg font-semibold text-white">💡 Innovation & Originality</label>
                             <span id="innovation-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
                         </div>
                         <p class="text-sm text-indigo-300 mb-2">How novel is the project concept? Does it offer a new solution or a fresh perspective on the hackathon theme?</p>
-                        <input type="range" id="innovation" name="innovation" min="1" max="10" value="5" class="slider-track slider-thumb">
+                        <input type="range" id="innovation" name="Number4" min="1" max="10" value="5" class="slider-track slider-thumb">
                     </div>
                 </div>
 
                 <div>
                     <label for="comments" class="block text-lg font-medium text-white mb-2">Technical Feedback & Comments</label>
-                    <textarea id="comments" name="comments" rows="5" class="form-input w-full px-4 py-2 rounded-lg" placeholder="Provide detailed technical feedback. What was impressive? What could be improved?"></textarea>
+                    <textarea id="comments" name="MultiLine" rows="5" class="form-input w-full px-4 py-2 rounded-lg" placeholder="Provide detailed technical feedback. What was impressive? What could be improved?"></textarea>
                 </div>
 
                 <div class="pt-4">
@@ -121,7 +139,7 @@
                     </button>
                 </div>
             </form>
-        </div>
+            </div>
     </main>
 
     <footer class="text-center py-8 mt-10 border-t border-indigo-900/50">
@@ -130,6 +148,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Logic to update the score display next to the slider
             const sliders = [
                 { input: 'api-usage', output: 'api-usage-value' },
                 { input: 'complexity', output: 'complexity-value' },
@@ -140,31 +159,18 @@
             sliders.forEach(slider => {
                 const inputElement = document.getElementById(slider.input);
                 const outputElement = document.getElementById(slider.output);
+                
+                // Initialize display value
+                outputElement.textContent = inputElement.value;
+
+                // Update display value on input change
                 inputElement.addEventListener('input', () => {
                     outputElement.textContent = inputElement.value;
                 });
             });
-
-            const form = document.getElementById('judging-form');
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const formData = new FormData(form);
-                const scores = {
-                    projectName: formData.get('projectName'),
-                    judgeName: formData.get('judgeName'),
-                    apiUsage: formData.get('apiUsage'),
-                    complexity: formData.get('complexity'),
-                    functionality: formData.get('functionality'),
-                    innovation: formData.get('innovation'),
-                    comments: formData.get('comments')
-                };
-                console.log('Submitting Scores:', scores);
-                alert('Score submitted! The data has been logged to the browser console.');
-                form.reset();
-                sliders.forEach(slider => {
-                    document.getElementById(slider.output).textContent = '5';
-                });
-            });
+            
+            // Note: The previous form submission JS was removed. 
+            // The browser will now handle submission directly to Zoho Forms.
         });
     </script>
 </body>
