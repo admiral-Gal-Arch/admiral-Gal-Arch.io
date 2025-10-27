@@ -1,42 +1,176 @@
-<div class="space-y-6 pt-4">
-    <div>
-        <div class="flex justify-between items-center mb-2">
-            <label class="text-lg font-semibold text-white">📡 API Usage & Integration</label>
-            <span id="api-usage-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
-        </div>
-        <p class="text-sm text-indigo-300 mb-2">How well did the team utilize the provided APIs? Was the integration seamless, creative, and core to the project's function?</p>
-        <input type="range" id="api-usage" name="Number1" min="1" max="10" value="5" class="slider-track slider-thumb">
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Galactic Archives - Technical Judging</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Custom styles for range slider track */
+        .slider-track {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #1e1b4b; /* Darker indigo */
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+        .slider-track:hover {
+            opacity: 1;
+        }
+        /* Custom styles for range slider thumb */
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #a78bfa; /* Vibrant violet */
+            cursor: pointer;
+            border: 2px solid #d1d5db;
+        }
+        .slider-thumb::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #a78bfa;
+            cursor: pointer;
+            border: 2px solid #d1d5db;
+        }
+        /* Override Tailwind and ensure the button looks right */
+        .btn-primary {
+            border: none !important;
+        }
+    </style>
+</head>
+<body class="text-indigo-100">
 
-    <div>
-        <div class="flex justify-between items-center mb-2">
-            <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution</label>
-            <span id="complexity-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
-        </div>
-        <p class="text-sm text-indigo-300 mb-2">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
-        <input type="range" id="complexity" name="Number2" min="1" max="10" value="5" class="slider-track slider-thumb">
-    </div>
+    <header class="text-center py-16 px-4">
+        <h1 class="font-orbitron text-5xl md:text-6xl font-bold uppercase tracking-widest text-white glow-text">Technical Judging</h1>
+        <p class="mt-4 text-xl md:text-2xl text-indigo-300 font-light">API-Centric Project Evaluation</p>
+    </header>
 
-    <div>
-        <div class="flex justify-between items-center mb-2">
-            <label class="text-lg font-semibold text-white">✅ Functionality & Reliability</label>
-            <span id="functionality-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
-        </div>
-        <p class="text-sm text-indigo-300 mb-2">Does the application work as demonstrated? Is it stable, performant, and free of significant bugs?</p>
-        <input type="range" id="functionality" name="Number3" min="1" max="10" value="5" class="slider-track slider-thumb">
-    </div>
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+        <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl max-w-4xl mx-auto">
+             <div class="text-center mb-8">
+                 <h2 class="text-3xl font-bold text-white font-orbitron">Submission Scorecard</h2>
+                 <p class="text-indigo-300 mt-2">Evaluate the project's technical merit based on the criteria below (1-10).</p>
+             </div>
 
-    <div>
-        <div class="flex justify-between items-center mb-2">
-            <label class="text-lg font-semibold text-white">💡 Innovation & Originality</label>
-            <span id="innovation-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
-        </div>
-        <p class="text-sm text-indigo-300 mb-2">How novel is the project concept? Does it offer a new solution or a fresh perspective on the hackathon theme?</p>
-        <input type="range" id="innovation" name="Number4" min="1" max="10" value="5" class="slider-track slider-thumb">
-    </div>
-</div>
+             <form id="judging-form" 
+                   action='https://forms.zohopublic.eu/galacticarchives1/form/JudgingForm/formperma/G-KlDYID4dHa3IChs7_V85L5E906htpMAPxlTv1eeYA/htmlRecords/submit' 
+                   method='POST' 
+                   accept-charset='UTF-8' 
+                   enctype='multipart/form-data' 
+                   class="space-y-8">
 
-<div>
-    <label for="comments" class="block text-lg font-medium text-white mb-2">Technical Feedback & Comments</label>
-    <textarea id="comments" name="MultiLine" rows="5" class="form-input w-full px-4 py-2 rounded-lg" placeholder="Provide detailed technical feedback. What was impressive? What could be improved?"></textarea>
-</div>
+                <input type="hidden" name="zf_referrer_name" value="">
+                <input type="hidden" name="zf_redirect_url" value="https://galacticarchives.space/judges.html">
+                <input type="hidden" name="zc_gad" value="">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="project-name" class="block text-md font-medium text-indigo-300 mb-2">Project / Team Name</label>
+                        <input type="text" id="project-name" name="SingleLine" required maxlength="255" placeholder="Team A - Project X" class="form-input w-full px-4 py-2 rounded-lg text-lg"/>
+                    </div>
+                    
+                    <div>
+                        <label for="judge-first-name" class="block text-md font-medium text-indigo-300 mb-2">Judge's Name</label>
+                        <div class="flex space-x-2">
+                             <input type="text" id="judge-first-name" name="Name_First" required class="form-input w-1/2 px-4 py-2 rounded-lg text-lg" placeholder="First Name">
+                             <input type="text" id="judge-last-name" name="Name_Last" required class="form-input w-1/2 px-4 py-2 rounded-lg text-lg" placeholder="Last Name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6 pt-4">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-lg font-semibold text-white">📡 API Usage & Integration</label>
+                            <span id="api-usage-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                        </div>
+                        <p class="text-sm text-indigo-300 mb-2">How well did the team utilize the provided APIs? Was the integration seamless, creative, and core to the project's function?</p>
+                        <input type="range" id="api-usage" name="Number1" min="1" max="10" value="5" class="slider-track slider-thumb">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution</label>
+                            <span id="complexity-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                        </div>
+                        <p class="text-sm text-indigo-300 mb-2">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
+                        <input type="range" id="complexity" name="Number2" min="1" max="10" value="5" class="slider-track slider-thumb">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-lg font-semibold text-white">✅ Functionality & Reliability</label>
+                            <span id="functionality-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                        </div>
+                        <p class="text-sm text-indigo-300 mb-2">Does the application work as demonstrated? Is it stable, performant, and free of significant bugs?</p>
+                        <input type="range" id="functionality" name="Number3" min="1" max="10" value="5" class="slider-track slider-thumb">
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-lg font-semibold text-white">💡 Innovation & Originality</label>
+                            <span id="innovation-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                        </div>
+                        <p class="text-sm text-indigo-300 mb-2">How novel is the project concept? Does it offer a new solution or a fresh perspective on the hackathon theme?</p>
+                        <input type="range" id="innovation" name="Number4" min="1" max="10" value="5" class="slider-track slider-thumb">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="comments" class="block text-lg font-medium text-white mb-2">Technical Feedback & Comments</label>
+                    <textarea id="comments" name="MultiLine" rows="5" class="form-input w-full px-4 py-2 rounded-lg" placeholder="Provide detailed technical feedback. What was impressive? What could be improved?"></textarea>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" id="submit-button" class="btn-primary w-full text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider">
+                        Submit Final Score
+                    </button>
+                </div>
+            </form>
+            </div>
+    </main>
+
+    <footer class="text-center py-8 mt-10 border-t border-indigo-900/50">
+        <p class="text-indigo-400 opacity-70">&copy; 2025 Stellar Command. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Logic to update the score display next to the slider
+            const sliders = [
+                { input: 'api-usage', output: 'api-usage-value' },
+                { input: 'complexity', output: 'complexity-value' },
+                { input: 'functionality', output: 'functionality-value' },
+                { input: 'innovation', output: 'innovation-value' }
+            ];
+
+            sliders.forEach(slider => {
+                const inputElement = document.getElementById(slider.input);
+                const outputElement = document.getElementById(slider.output);
+                
+                // Initialize display value based on default value
+                outputElement.textContent = inputElement.value;
+
+                // Update display value on input change
+                inputElement.addEventListener('input', () => {
+                    outputElement.textContent = inputElement.value;
+                });
+            });
+            
+            // Note: The form now relies entirely on the browser submitting data to the Zoho 'action' URL.
+        });
+    </script>
+</body>
+</html>
