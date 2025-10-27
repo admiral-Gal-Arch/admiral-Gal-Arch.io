@@ -10,44 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Custom styles for range slider track */
-        .slider-track {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            border-radius: 5px;
-            background: #1e1b4b; /* Darker indigo */
-            outline: none;
-            opacity: 0.7;
-            -webkit-transition: .2s;
-            transition: opacity .2s;
-        }
-        .slider-track:hover {
-            opacity: 1;
-        }
-        /* Custom styles for range slider thumb */
-        .slider-thumb::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #a78bfa; /* Vibrant violet */
-            cursor: pointer;
-            border: 2px solid #d1d5db;
-        }
-        .slider-thumb::-moz-range-thumb {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #a78bfa;
-            cursor: pointer;
-            border: 2px solid #d1d5db;
-        }
-        /* Override Tailwind and ensure the button looks right */
-        .btn-primary {
-            border: none !important;
-        }
         /* Custom style for the glass effect on the card */
         .glass-card {
             background-color: rgba(30, 27, 75, 0.8); /* Semi-transparent darker indigo */
@@ -64,6 +26,22 @@
         .form-input::placeholder {
             color: #9ca3af; /* Gray-400 */
         }
+        /* Style for the number input to match the theme */
+        .score-input {
+            background-color: #312e81; 
+            border: 1px solid #4f46e5; 
+            color: #eef2ff; 
+            text-align: center;
+            width: 80px; /* Make the input box smaller */
+        }
+        /* Override Tailwind and ensure the button looks right */
+        .btn-primary {
+            border: none !important;
+            background-color: #7c3aed; /* Violet-600 */
+        }
+        .btn-primary:hover {
+            background-color: #6d28d9; /* Violet-700 */
+        }
     </style>
 </head>
 <body class="bg-gray-900 text-indigo-100 min-h-screen">
@@ -77,7 +55,7 @@
         <div class="glass-card rounded-2xl p-8 md:p-12 shadow-2xl max-w-4xl mx-auto">
              <div class="text-center mb-8">
                  <h2 class="text-3xl font-bold text-white font-orbitron">Submission Scorecard</h2>
-                 <p class="text-indigo-300 mt-2">Evaluate the project's technical merit based on the criteria below (1-10).</p>
+                 <p class="text-indigo-300 mt-2">Enter a score for the project's technical merit based on the criteria below (1-10).</p>
              </div>
 
              <form id="judging-form" 
@@ -117,44 +95,76 @@
                  </div>
 
                  <div class="space-y-6 pt-4">
-                     <div>
-                         <div class="flex justify-between items-center mb-2">
-                             <label class="text-lg font-semibold text-white">📡 API Usage & Integration (Score 1-10) *</label>
-                             <span id="api-usage-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                     <div class="flex flex-col md:flex-row md:items-center md:space-x-4 p-4 rounded-lg bg-indigo-900/30 border border-indigo-700/50">
+                         <div class="flex-grow">
+                             <label class="text-lg font-semibold text-white">📡 API Usage & Integration *</label>
+                             <p class="text-sm text-indigo-300 mt-1">How well did the team utilize the provided APIs? Was the integration seamless, creative, and core to the project's function?</p>
                          </div>
-                         <p class="text-sm text-indigo-300 mb-2">How well did the team utilize the provided APIs? Was the integration seamless, creative, and core to the project's function?</p>
-                         <input type="range" id="api-usage-slider" min="1" max="10" value="5" class="slider-track slider-thumb">
-                         <input type="hidden" id="api-usage-input" name="Number1" value="5" required>
+                         <div class="mt-3 md:mt-0 flex-shrink-0">
+                             <input 
+                                 type="number" 
+                                 name="Number1" 
+                                 min="1" 
+                                 max="10" 
+                                 required 
+                                 placeholder="Score" 
+                                 class="score-input px-4 py-2 rounded-lg text-lg"
+                                 title="Please enter a score between 1 and 10">
+                         </div>
                      </div>
 
-                     <div>
-                         <div class="flex justify-between items-center mb-2">
-                             <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution (Score 1-10) *</label>
-                             <span id="complexity-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                     <div class="flex flex-col md:flex-row md:items-center md:space-x-4 p-4 rounded-lg bg-indigo-900/30 border border-indigo-700/50">
+                         <div class="flex-grow">
+                             <label class="text-lg font-semibold text-white">⚙️ Technical Complexity & Execution *</label>
+                             <p class="text-sm text-indigo-300 mt-1">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
                          </div>
-                         <p class="text-sm text-indigo-300 mb-2">Did the project tackle a difficult problem? Is the underlying code well-structured, efficient, and robust?</p>
-                         <input type="range" id="complexity-slider" min="1" max="10" value="5" class="slider-track slider-thumb">
-                         <input type="hidden" id="complexity-input" name="Number2" value="5" required>
+                         <div class="mt-3 md:mt-0 flex-shrink-0">
+                             <input 
+                                 type="number" 
+                                 name="Number2" 
+                                 min="1" 
+                                 max="10" 
+                                 required 
+                                 placeholder="Score" 
+                                 class="score-input px-4 py-2 rounded-lg text-lg"
+                                 title="Please enter a score between 1 and 10">
+                         </div>
                      </div>
 
-                     <div>
-                         <div class="flex justify-between items-center mb-2">
-                             <label class="text-lg font-semibold text-white">✅ Functionality & Reliability (Score 1-10) *</label>
-                             <span id="functionality-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                     <div class="flex flex-col md:flex-row md:items-center md:space-x-4 p-4 rounded-lg bg-indigo-900/30 border border-indigo-700/50">
+                         <div class="flex-grow">
+                             <label class="text-lg font-semibold text-white">✅ Functionality & Reliability *</label>
+                             <p class="text-sm text-indigo-300 mt-1">Does the application work as demonstrated? Is it stable, performant, and free of significant bugs?</p>
                          </div>
-                         <p class="text-sm text-indigo-300 mb-2">Does the application work as demonstrated? Is it stable, performant, and free of significant bugs?</p>
-                         <input type="range" id="functionality-slider" min="1" max="10" value="5" class="slider-track slider-thumb">
-                         <input type="hidden" id="functionality-input" name="Number3" value="5" required>
+                         <div class="mt-3 md:mt-0 flex-shrink-0">
+                             <input 
+                                 type="number" 
+                                 name="Number3" 
+                                 min="1" 
+                                 max="10" 
+                                 required 
+                                 placeholder="Score" 
+                                 class="score-input px-4 py-2 rounded-lg text-lg"
+                                 title="Please enter a score between 1 and 10">
+                         </div>
                      </div>
 
-                     <div>
-                         <div class="flex justify-between items-center mb-2">
-                             <label class="text-lg font-semibold text-white">💡 Innovation & Originality (Score 1-10) *</label>
-                             <span id="innovation-value" class="font-orbitron text-2xl text-white bg-indigo-900/50 px-4 py-1 rounded-md">5</span>
+                     <div class="flex flex-col md:flex-row md:items-center md:space-x-4 p-4 rounded-lg bg-indigo-900/30 border border-indigo-700/50">
+                         <div class="flex-grow">
+                             <label class="text-lg font-semibold text-white">💡 Innovation & Originality *</label>
+                             <p class="text-sm text-indigo-300 mt-1">How novel is the project concept? Does it offer a new solution or a fresh perspective on the hackathon theme?</p>
                          </div>
-                         <p class="text-sm text-indigo-300 mb-2">How novel is the project concept? Does it offer a new solution or a fresh perspective on the hackathon theme?</p>
-                         <input type="range" id="innovation-slider" min="1" max="10" value="5" class="slider-track slider-thumb">
-                         <input type="hidden" id="innovation-input" name="Number4" value="5" required>
+                         <div class="mt-3 md:mt-0 flex-shrink-0">
+                             <input 
+                                 type="number" 
+                                 name="Number4" 
+                                 min="1" 
+                                 max="10" 
+                                 required 
+                                 placeholder="Score" 
+                                 class="score-input px-4 py-2 rounded-lg text-lg"
+                                 title="Please enter a score between 1 and 10">
+                         </div>
                      </div>
                  </div>
 
@@ -164,7 +174,7 @@
                  </div>
 
                  <div class="pt-4">
-                     <button type="submit" id="submit-button" class="btn-primary w-full bg-violet-600 hover:bg-violet-700 text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider transition duration-300 ease-in-out">
+                     <button type="submit" id="submit-button" class="btn-primary w-full text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider transition duration-300 ease-in-out">
                          Submit Final Score
                      </button>
                  </div>
@@ -177,36 +187,7 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Define the relationships between the UI elements and the form fields
-            const sliders = [
-                { sliderId: 'api-usage-slider', outputId: 'api-usage-value', inputId: 'api-usage-input' },
-                { sliderId: 'complexity-slider', outputId: 'complexity-value', inputId: 'complexity-input' },
-                { sliderId: 'functionality-slider', outputId: 'functionality-value', inputId: 'functionality-input' },
-                { sliderId: 'innovation-slider', outputId: 'innovation-value', inputId: 'innovation-input' }
-            ];
-
-            sliders.forEach(sliderConfig => {
-                const sliderElement = document.getElementById(sliderConfig.sliderId);
-                const outputElement = document.getElementById(sliderConfig.outputId);
-                const inputElement = document.getElementById(sliderConfig.inputId);
-                
-                // Function to update all related elements
-                const updateScore = () => {
-                    const value = sliderElement.value;
-                    // 1. Update the visual display (span)
-                    outputElement.textContent = value;
-                    // 2. Update the hidden input's value for form submission
-                    inputElement.value = value;
-                };
-
-                // Initialize display and hidden input value based on default slider value
-                updateScore();
-
-                // Update display and hidden input value on slider movement
-                sliderElement.addEventListener('input', updateScore);
-            });
-        });
+        // No custom JavaScript needed for number inputs as browser handles validation
     </script>
 </body>
 </html>
