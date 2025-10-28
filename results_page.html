@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Archives - Results</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Galactic Archives Dark Theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Deep Space Background */
+            color: #e2e8f0; /* Default Light Text */
+        }
+        h1, h2, h3 {
+            color: #c7d2fe; /* Light Indigo for Headings */
+        }
+         .action-button { /* General class for buttons */
+            background-color: #6366f1; /* Indigo */
+            transition: background-color 0.2s;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 2rem; /* Adjusted padding */
+            border-radius: 0.5rem; /* Slightly larger radius */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            cursor: pointer;
+        }
+        .action-button:hover {
+            background-color: #4f46e5; /* Darker Indigo */
+        }
+        .action-button:disabled {
+            background-color: #4338ca; /* Darker Indigo when disabled */
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .link-button { /* Specific style for navigation links styled as buttons */
+             background-color: #312e81; /* Darker Indigo for nav */
+             color: #c7d2fe;
+             padding: 0.5rem 1rem;
+             border-radius: 0.375rem; /* Match input radius */
+             text-decoration: none;
+             display: inline-block;
+             transition: background-color 0.2s;
+        }
+         .link-button:hover {
+             background-color: #4338ca;
+         }
+        /* Results Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            border-radius: 0.5rem;
+            overflow: hidden; /* Ensures border radius applies to corners */
+        }
+        th, td {
+            border: 1px solid #334155; /* Slate border */
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #28344e; /* Slightly lighter dark for header */
+            color: #c7d2fe; /* Light Indigo */
+            font-weight: bold;
+        }
+        tbody tr:nth-child(odd) {
+            background-color: #1e293b; /* Darker card background */
+        }
+        tbody tr:nth-child(even) {
+            background-color: #28344e; /* Slightly lighter dark */
+        }
+        tbody tr:hover {
+            background-color: #36415a;
+        }
+        .rank-col { width: 5%; text-align: center; font-weight: bold; font-size: 1.1em; }
+        .score-col { width: 10%; text-align: right; font-weight: bold; }
+        .track-col { width: 20%; }
+        .team-col { width: 30%; font-weight: bold;}
+        .judges-col { width: 10%; text-align: center;}
+        td.score-col { color: #818cf8; } /* Accent color for scores */
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <!-- Main Container -->
+    <div class="max-w-4xl mx-auto">
+
+         <!-- Link back to Form Page -->
+        <div class="text-center mb-8">
+            <a href="judging_form.html" class="link-button">Back to Judging Form</a>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection">
+             <div class="bg-[#1e293b] p-6 md:p-10 rounded-lg shadow-xl border border-gray-700">
+                <header class="text-center mb-8">
+                    <h1 class="text-3xl font-extrabold text-[#818cf8] tracking-wide">HACKATHON RESULTS</h1>
+                    <p class="text-gray-400 mt-2">Aggregated scores from all judges.</p>
+                </header>
+
+                <div class="text-center mb-6">
+                    <button id="refreshResultsBtn" class="action-button link-button">Refresh Results</button>
+                </div>
+
+                 <div id="resultsMessage" class="text-center mb-4 hidden"></div>
+
+                 <!-- Container for the results table -->
+                 <div id="resultsTableContainer" class="overflow-x-auto">
+                     <!-- Results table will be injected here by JavaScript -->
+                     <p class="text-center text-gray-500">Loading results...</p>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Results Fetching and Display ---
+        const refreshResultsBtn = document.getElementById('refreshResultsBtn');
+        const resultsTableContainer = document.getElementById('resultsTableContainer');
+        const resultsMessage = document.getElementById('resultsMessage');
+
+        async function fetchAndDisplayResults() {
+            resultsTableContainer.innerHTML = '<p class="text-center text-gray-500">Loading results...</p>';
+            resultsMessage.className = 'text-center mb-4 hidden'; // Reset message
+            refreshResultsBtn.disabled = true;
+
+            // --- Use the correct results endpoint URL ---
+            const resultsUrl = 'https://galarc-judge-backend.onrender.com/api/get-results';
+
+            try {
+                const response = await fetch(resultsUrl);
+                 if (!response.ok) {
+                    let errorMsg = `HTTP error! status: ${response.status}`;
+                    try { const errorData = await response.json(); errorMsg += ` - ${errorData.detail || errorData.message || 'No details.'}`; } catch (e) { /* ignore */ }
+                    throw new Error(errorMsg);
+                }
+                const resultsData = await response.json();
+
+                if (!resultsData || !Array.isArray(resultsData) || resultsData.length === 0) {
+                     resultsTableContainer.innerHTML = '<p class="text-center text-yellow-400">No judging results found yet.</p>';
+                     return; // Exit if no data
+                }
+
+                const processedResults = processJudgingData(resultsData);
+                renderResultsTable(processedResults);
+
+            } catch (error) {
+                 console.error('Failed to fetch results:', error);
+                 resultsMessage.textContent = `Failed to load results: ${error.message}`;
+                 resultsMessage.className = 'text-center mb-4 text-red-400';
+                 resultsTableContainer.innerHTML = ''; // Clear loading message on error
+            } finally {
+                 refreshResultsBtn.disabled = false;
+            }
+        }
+
+        function processJudgingData(data) {
+             const teamScores = {}; // { teamName: { totalScores: {}, count: 0, track: '' } }
+
+             data.forEach(submission => {
+                 // Skip submissions that might be incomplete or malformed
+                 if (!submission || typeof submission !== 'object' || !submission.teamName || !submission.scores || typeof submission.scores !== 'object') {
+                     console.warn("Skipping invalid submission data:", submission);
+                     return;
+                 }
+                 const teamName = submission.teamName;
+                 if (!teamScores[teamName]) {
+                     teamScores[teamName] = {
+                         totalScores: { innovation: 0, technical: 0, apiUsage: 0, presentation: 0, impact: 0 },
+                         count: 0,
+                         track: submission.hackathonTrack // Assume track is consistent per team
+                     };
+                 }
+                 teamScores[teamName].count++;
+                 // Safely add scores, default to 0 if a criterion is missing in a submission
+                 teamScores[teamName].totalScores.innovation += submission.scores.innovation || 0;
+                 teamScores[teamName].totalScores.technical += submission.scores.technical || 0;
+                 teamScores[teamName].totalScores.apiUsage += submission.scores.apiUsage || 0;
+                 teamScores[teamName].totalScores.presentation += submission.scores.presentation || 0;
+                 teamScores[teamName].totalScores.impact += submission.scores.impact || 0;
+             });
+
+            // Calculate averages
+            const aggregatedResults = [];
+            for (const teamName in teamScores) {
+                 const teamData = teamScores[teamName];
+                 if (teamData.count === 0) continue; // Skip teams with no valid scores
+
+                 const avgScores = {};
+                 let totalScoreSum = 0;
+                 const criteriaCount = Object.keys(teamData.totalScores).length;
+
+                 for (const criterion in teamData.totalScores) {
+                     const avg = teamData.totalScores[criterion] / teamData.count;
+                     avgScores[criterion] = avg;
+                     totalScoreSum += avg;
+                 }
+                  // Avoid division by zero if criteriaCount is somehow 0
+                 const overallAvg = criteriaCount > 0 ? totalScoreSum / criteriaCount : 0;
+
+
+                 aggregatedResults.push({
+                     teamName: teamName,
+                     track: teamData.track,
+                     judgeCount: teamData.count,
+                     avgScores: avgScores,
+                     overallAvg: overallAvg
+                 });
+             }
+
+             // Sort by overall average score descending
+             aggregatedResults.sort((a, b) => b.overallAvg - a.overallAvg);
+
+             return aggregatedResults;
+        }
+
+        function renderResultsTable(processedData) {
+            // Map track keys to readable names
+            const trackNames = {
+                'alien_artifacts': 'Alien Artifacts',
+                'celestial_cartographer': 'Celestial Cartographer',
+                'ai_advisor': 'AI Advisor'
+            };
+
+            let tableHTML = `
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-[#28344e]">
+                        <tr>
+                            <th scope="col" class="rank-col px-6 py-3 text-center text-xs font-medium text-indigo-300 uppercase tracking-wider">Rank</th>
+                            <th scope="col" class="team-col px-6 py-3 text-left text-xs font-medium text-indigo-300 uppercase tracking-wider">Team Name</th>
+                            <th scope="col" class="track-col px-6 py-3 text-left text-xs font-medium text-indigo-300 uppercase tracking-wider">Track</th>
+                            <th scope="col" class="judges-col px-6 py-3 text-center text-xs font-medium text-indigo-300 uppercase tracking-wider">Judges</th>
+                            <th scope="col" class="score-col px-6 py-3 text-right text-xs font-medium text-indigo-300 uppercase tracking-wider">Avg Score</th>
+                            <!-- Add individual criteria headers if needed -->
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+            `;
+
+             if (processedData.length === 0) {
+                 tableHTML += `<tr><td colspan="5" class="text-center py-4 text-gray-500">No processed results available.</td></tr>`;
+            } else {
+                 processedData.forEach((team, index) => {
+                    tableHTML += `
+                        <tr>
+                            <td class="rank-col px-6 py-4 whitespace-nowrap">${index + 1}</td>
+                            <td class="team-col px-6 py-4 whitespace-nowrap">${team.teamName || 'N/A'}</td>
+                            <td class="track-col px-6 py-4 whitespace-nowrap">${trackNames[team.track] || team.track || 'N/A'}</td>
+                            <td class="judges-col px-6 py-4 whitespace-nowrap">${team.judgeCount || 0}</td>
+                            <td class="score-col px-6 py-4 whitespace-nowrap">${team.overallAvg !== undefined ? team.overallAvg.toFixed(2) : 'N/A'}</td>
+                            <!-- Optionally add columns for avgScores.innovation.toFixed(2), etc. -->
+                        </tr>
+                    `;
+                 });
+            }
+
+
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            resultsTableContainer.innerHTML = tableHTML;
+        }
+
+         // --- Initial Setup ---
+         refreshResultsBtn.addEventListener('click', fetchAndDisplayResults);
+         // Fetch results automatically when the page loads
+         window.addEventListener('DOMContentLoaded', fetchAndDisplayResults);
+
+    </script>
+
+</body>
+</html>
