@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Archives API Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Galactic Archives Dark Theme */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a; /* Deep Space Background */
+            color: #e2e8f0; /* Default Light Text */
+        }
+        h1, h2, h3 {
+            color: #c7d2fe; /* Light Indigo for Headings */
+        }
+        .code-block {
+            background-color: #1e293b; /* Darker secondary background for code */
+            color: #a5f3fc; /* Vibrant Cyan Text */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+        }
+        .endpoint-card {
+            background-color: #1e293b; /* Dark Card background */
+            border-left: 5px solid;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3); /* Subtle dark shadow */
+            transition: transform 0.2s;
+            color: #e2e8f0;
+        }
+        .endpoint-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.5);
+        }
+        /* Custom styles for navigation buttons in dark mode */
+        .nav-button {
+             border-bottom-width: 4px; /* Ensure space for border */
+        }
+        .nav-active {
+            border-color: #6366f1 !important; /* Indigo accent */
+            color: #a5b4fc !important; /* Lighter Indigo Text */
+            background-color: #1e293b !important; /* Slightly lighter dark bg */
+        }
+        .nav-inactive {
+             border-color: transparent !important;
+             color: #94a3b8 !important; /* Gray text */
+        }
+        .nav-inactive:hover {
+             border-color: #4f46e5 !important; /* Darker Indigo on hover */
+             color: #c7d2fe !important; /* Lighter text on hover */
+        }
+        table {
+            border-color: #334155; /* Slate border for tables */
+        }
+        th {
+            background-color: #334155; /* Slate header */
+            color: #cbd5e1; /* Lighter gray header text */
+        }
+        tbody {
+            background-color: #1e293b; /* Dark card background for table body */
+            border-color: #334155;
+        }
+        td {
+            border-color: #334155 !important;
+        }
+
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-[#818cf8] tracking-wide">GALACTIC ARCHIVES API PORTAL</h1>
+            <p class="text-gray-400 mt-2">Specialized Data Endpoints for Your Hackathon Tracks</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="flex border-b border-gray-700 mb-8 bg-[#1e293b] rounded-t-lg">
+            <button id="nav-overview" class="py-3 px-6 text-sm font-medium transition duration-150 nav-button nav-active" onclick="showPage('overview')">
+                Hackathon Tracks Overview
+            </button>
+            <button id="nav-docs" class="py-3 px-6 text-sm font-medium transition duration-150 nav-button nav-inactive" onclick="showPage('docs')">
+                Full API Documentation
+            </button>
+        </div>
+
+        <!-- Main Content Area -->
+        <div id="content-container" class="pb-12">
+            <!-- Content loaded here by JavaScript -->
+        </div>
+
+    </div>
+
+    <script>
+        // --- DATA STRUCTURE (Transferred from Python/Streamlit) ---
+        const API_BASE_URL = "https://api.galacticarchives.space";
+        
+        const API_ENDPOINTS = {
+            "Core Metrics": {
+                "tag": "Core Metrics",
+                "color": "#818cf8", /* Indigo Light */
+                "endpoints": [
+                    {"path": "/api/dashboard", "summary": "Get cached, aggregated metrics for the dashboard.", "params": []},
+                ]
+            },
+            "Alien Artifacts Division": {
+                "tag": "Alien Artifacts Division",
+                "color": "#f87171", /* Light Red */
+                "endpoints": [
+                    {"path": "/api/artifact/neo_clusters", "summary": "Paginated NEO Data for ML Clustering (High-D Data).", "params": [["page", "int"], ["size", "int"]]},
+                    {"path": "/api/artifact/geomagnetic_data", "summary": "Latest Geomagnetic Field Data (Anomaly Search).", "params": [["lat", "float"], ["lon", "float"]]},
+                    {"path": "/api/artifact/lunar_surface_grid", "summary": "Mocked High-Res Lunar Surface Grid Metadata.", "params": []},
+                ]
+            },
+            "Celestial Cartographer": {
+                "tag": "Celestial Cartographer",
+                "color": "#34d399", /* Light Green */
+                "endpoints": [
+                    {"path": "/api/cartographer/flyover_path", "summary": "Mocked ISS Flyover Path (Guaranteed Trajectory).", "params": []},
+                    {"path": "/api/cartographer/launch_sites", "summary": "Simplified SpaceX Launch Sites (Map Markers).", "params": []},
+                    {"path": "/api/cartographer/geocode_location", "summary": "Geocode Address to Coordinates (OSM).", "params": [["address", "str"]]},
+                    {"path": "/api/cartographer/reverse_geocode", "summary": "Convert Coordinates to Address/Place Name (OSM).", "params": [["lat", "float"], ["lon", "float"]]},
+                    {"path": "/api/cartographer/exoplanet_targets", "summary": "Simplified Exoplanet Data for Mapping/Charting.", "params": []},
+                ]
+            },
+            "AI Track Advisor": {
+                "tag": "AI Track Advisor",
+                "color": "#fb923c", /* Light Orange */
+                "endpoints": [
+                    {"path": "/api/advisor/latest_news", "summary": "Get Latest Space News Articles.", "params": []},
+                    {"path": "/api/control/solar_storm_alert", "summary": "Simplified solar storm status (72h).", "params": []},
+                    {"path": "/api/advisor/conjunction_risks", "summary": "Current Satellite Conjunction Risk Data (Debris).", "params": []},
+                    {"path": "/api/advisor/starlink_status", "summary": "Current Starlink Satellite Catalog Status.", "params": []},
+                    {"path": "/api/advisor/mission_telemetry", "summary": "Mock Time-Series Telemetry Data (Anomaly Prediction).", "params": []},
+                    {"path": "/api/advisor/gps_health_status", "summary": "Mock GPS Constellation Health Metrics.", "params": []},
+                ]
+            }
+        };
+
+        // --- CORE RENDERING FUNCTIONS ---
+
+        function generatePythonExample(endpoint) {
+            const path = endpoint.path;
+            const params = endpoint.params;
+            
+            let code = `import requests\n`;
+            code += `import json\n\n`;
+            code += `API_URL = "${API_BASE_URL}"\n`;
+            code += `ENDPOINT = "${path}"\n\n`;
+            
+            if (params.length > 0) {
+                 const paramAssignment = params.map(p => {
+                    let placeholder = p[1] === 'float' || p[1] === 'int' ? 0.0 : "'PLACEHOLDER'";
+                    if (p[0] === 'address') placeholder = "'Kennedy Space Center'";
+                    if (p[0] === 'lat') placeholder = '28.56';
+                    if (p[0] === 'lon') placeholder = '-80.58';
+                    return `    "${p[0]}": ${placeholder}`;
+                }).join(',\n');
+                code += `params = {\n${paramAssignment}\n}\n\n`;
+                code += `try:\n`;
+                code += `    response = requests.get(API_URL + ENDPOINT, params=params, timeout=10)\n`;
+            } else {
+                code += `try:\n`;
+                code += `    response = requests.get(API_URL + ENDPOINT, timeout=10)\n`;
+            }
+            
+            code += `    response.raise_for_status()\n`;
+            code += `    data = response.json()\n`;
+            code += `    print(json.dumps(data, indent=2))\n`;
+            code += `except requests.exceptions.RequestException as e:\n`;
+            code += `    print(f"API Call Failed: {e}")\n`;
+            
+            // Basic HTML escaping for display in <pre>
+            return code.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        function renderHomePage() {
+            let html = ``;
+            
+            for (const trackName in API_ENDPOINTS) {
+                const data = API_ENDPOINTS[trackName];
+                if (trackName === "Core Metrics") continue;
+                
+                html += `<section class="mb-12 p-6 rounded-xl bg-[#1e293b] shadow-xl border border-gray-700">`;
+                html += `<h2 class="text-2xl font-bold mb-4" style="color: ${data.color};">${trackName}</h2>`;
+                html += `<p class="text-gray-400 mb-6">Dedicated endpoints designed to give your models and visualizations a head start in the <b>${trackName}</b> challenge.</p>`;
+                
+                // Grid layout for endpoints (3 columns on desktop)
+                html += `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">`;
+                
+                data.endpoints.forEach(endpoint => {
+                    const borderColor = data.color;
+                    
+                    html += `
+                        <div class="p-4 flex flex-col justify-between border rounded-lg border-gray-600 hover:border-indigo-400 transition duration-150 bg-gray-800">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-200">${endpoint.summary}</p>
+                            </div>
+                            <div class="mt-3">
+                                <code class="text-xs bg-gray-700 text-green-400 font-mono py-1 px-2 rounded">GET ${endpoint.path}</code>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></section>`;
+            }
+            
+            return html;
+        }
+
+        function renderDocumentationPage() {
+            let html = ``;
+            html += `<h2 class="text-3xl font-bold text-gray-100 mb-6">API Reference - All Endpoints</h2>`;
+            
+            for (const trackName in API_ENDPOINTS) {
+                const data = API_ENDPOINTS[trackName];
+                const borderColor = data.color;
+                
+                html += `<section class="mb-12 border-b border-gray-700 pb-6">`;
+                html += `<h3 class="text-xl font-extrabold mb-4" style="color: ${borderColor};">🚀 ${trackName}</h3>`;
+                
+                data.endpoints.forEach(endpoint => {
+                    // Endpoint Expander
+                    html += `<div class="endpoint-card p-5 rounded-lg shadow-md mb-4 border-t-4" style="border-left-color: ${borderColor}; border-top-color: #334155;">`; // Using slate for top border
+                    html += `<p class="text-lg font-mono font-bold text-gray-100 mb-3">GET ${endpoint.path}</p>`;
+                    
+                    // Summary
+                    html += `<p class="text-gray-400 mb-4">${endpoint.summary}</p>`;
+
+                    // Parameters Table
+                    if (endpoint.params.length > 0) {
+                        html += `<h4 class="text-base font-semibold mt-4 mb-2 text-gray-300">Parameters</h4>`;
+                        html += `<table class="min-w-full divide-y divide-gray-700 border border-gray-700">`;
+                        html += `<thead class="bg-gray-700"><tr><th class="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase">Name</th><th class="px-3 py-2 text-left text-xs font-medium text-gray-300 uppercase">Type</th></tr></thead>`;
+                        html += `<tbody class="bg-gray-800 divide-y divide-gray-700">`;
+                        endpoint.params.forEach(p => {
+                            html += `<tr><td class="px-3 py-2 whitespace-nowrap text-sm text-gray-100">${p[0]}</td><td class="px-3 py-2 whitespace-nowrap text-sm text-gray-400">${p[1].toUpperCase()}</td></tr>`;
+                        });
+                        html += `</tbody></table>`;
+                    } else {
+                        html += `<p class="text-sm text-gray-500 italic mt-4">No parameters required.</p>`;
+                    }
+
+                    // Code Example
+                    html += `<h4 class="text-base font-semibold mt-6 mb-2 text-gray-300">Python Example</h4>`;
+                    html += `<pre class="code-block">${generatePythonExample(endpoint)}</pre>`;
+                    
+                    html += `</div>`; // Close endpoint container
+                });
+
+                html += `</section>`;
+            }
+            
+            return html;
+        }
+
+        // --- INITIALIZATION ---
+
+        function updateNav(activePageId) {
+            document.querySelectorAll('.flex button').forEach(button => {
+                if (button.id === `nav-${activePageId}`) {
+                    button.classList.add('nav-active');
+                    button.classList.remove('nav-inactive');
+                } else {
+                    button.classList.remove('nav-active');
+                    button.classList.add('nav-inactive');
+                }
+            });
+        }
+
+        function showPage(pageId) {
+            const container = document.getElementById('content-container');
+            if (pageId === 'overview') {
+                container.innerHTML = renderHomePage();
+            } else if (pageId === 'docs') {
+                container.innerHTML = renderDocumentationPage();
+            }
+            updateNav(pageId);
+            window.scrollTo(0, 0); 
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('overview'); // Default to the overview page
+        });
+    </script>
+</body>
+</html>
+
