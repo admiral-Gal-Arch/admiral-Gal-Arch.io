@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Archives - Judging Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Galactic Archives Dark Theme */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Deep Space Background */
+            color: #e2e8f0; /* Default Light Text */
+        }
+        h1, h2, h3 {
+            color: #c7d2fe; /* Light Indigo for Headings */
+        }
+        label {
+            color: #94a3b8; /* Lighter gray for labels */
+        }
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            background-color: #1e293b; /* Darker secondary background */
+            border-color: #334155; /* Slate border */
+            color: #e2e8f0; /* Light text */
+            border-radius: 0.375rem; /* Rounded corners */
+            border-width: 1px; /* Ensure border is visible */
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #6366f1; /* Indigo accent on focus */
+            box-shadow: 0 0 0 2px #4f46e5; /* Indigo ring on focus */
+        }
+        select {
+             /* Basic styling for dropdown arrow */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        /* Style range inputs */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #334155; /* Slate track */
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+            border-radius: 4px;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #6366f1; /* Indigo thumb */
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #6366f1; /* Indigo thumb */
+            cursor: pointer;
+            border-radius: 50%;
+            border: none;
+        }
+         .action-button { /* General class for buttons */
+            background-color: #6366f1; /* Indigo */
+            transition: background-color 0.2s;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 2rem; /* Adjusted padding */
+            border-radius: 0.5rem; /* Slightly larger radius */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            cursor: pointer;
+        }
+        .action-button:hover {
+            background-color: #4f46e5; /* Darker Indigo */
+        }
+        .action-button:disabled {
+            background-color: #4338ca; /* Darker Indigo when disabled */
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .link-button { /* Specific style for navigation links styled as buttons */
+             background-color: #312e81; /* Darker Indigo for nav */
+             color: #c7d2fe;
+             padding: 0.5rem 1rem;
+             border-radius: 0.375rem; /* Match input radius */
+             text-decoration: none;
+             display: inline-block;
+             transition: background-color 0.2s;
+        }
+         .link-button:hover {
+             background-color: #4338ca;
+         }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <!-- Main Container -->
+    <div class="max-w-3xl mx-auto">
+
+        <!-- Link to Results Page -->
+        <div class="text-center mb-8">
+            <a href="results_page.html" class="link-button">View Results</a>
+        </div>
+
+        <!-- Judging Form Section -->
+        <div id="judgingFormSection">
+            <div class="bg-[#1e293b] p-6 md:p-10 rounded-lg shadow-xl border border-gray-700">
+                <header class="text-center mb-8">
+                    <h1 class="text-3xl font-extrabold text-[#818cf8] tracking-wide">JUDGING FORM</h1>
+                    <p class="text-gray-400 mt-2">Galactic Archives Hackathon</p>
+                </header>
+
+                <form id="judgingForm">
+                    <!-- Judge & Team Info -->
+                    <fieldset class="mb-6 border-b border-gray-600 pb-6">
+                        <h2 class="text-xl font-bold mb-4">Identification</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="judgeName" class="block text-sm font-medium mb-1">Judge Name</label>
+                                <input type="text" id="judgeName" name="judgeName" required class="w-full p-2 border">
+                            </div>
+                            <div>
+                                <label for="teamName" class="block text-sm font-medium mb-1">Team / Project Name</label>
+                                <input type="text" id="teamName" name="teamName" required class="w-full p-2 border">
+                            </div>
+                        </div>
+                         <div class="mt-4">
+                            <label for="hackathonTrack" class="block text-sm font-medium mb-1">Hackathon Track</label>
+                            <select id="hackathonTrack" name="hackathonTrack" required class="w-full p-2 border">
+                                <option value="" disabled selected>Select Track...</option>
+                                <option value="alien_artifacts">Alien Artifacts Division</option>
+                                <option value="celestial_cartographer">Celestial Cartographer</option>
+                                <option value="ai_advisor">AI Track Advisor</option>
+                            </select>
+                        </div>
+                    </fieldset>
+
+                    <!-- Judging Criteria -->
+                    <fieldset class="mb-6 border-b border-gray-600 pb-6">
+                        <h2 class="text-xl font-bold mb-4">Judging Criteria (Score 1-10)</h2>
+                        <div class="space-y-6">
+                            <!-- Criterion 1: Innovation -->
+                            <div>
+                                <label for="scoreInnovation" class="block text-sm font-medium mb-1">1. Innovation & Creativity</label>
+                                <div class="flex items-center space-x-3">
+                                   <span class="text-xs text-gray-400">1</span>
+                                   <input type="range" id="scoreInnovation" name="scoreInnovation" min="1" max="10" step="1" value="5" required class="w-full">
+                                   <span class="text-xs text-gray-400">10</span>
+                                   <span id="innovationValue" class="text-sm font-semibold w-8 text-right">5</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Originality, novel approach, creative use of data.</p>
+                            </div>
+                            <!-- Criterion 2: Technical Implementation -->
+                            <div>
+                                <label for="scoreTechnical" class="block text-sm font-medium mb-1">2. Technical Implementation & Complexity</label>
+                                 <div class="flex items-center space-x-3">
+                                   <span class="text-xs text-gray-400">1</span>
+                                   <input type="range" id="scoreTechnical" name="scoreTechnical" min="1" max="10" step="1" value="5" required class="w-full">
+                                   <span class="text-xs text-gray-400">10</span>
+                                    <span id="technicalValue" class="text-sm font-semibold w-8 text-right">5</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Quality, challenge overcome, robustness.</p>
+                            </div>
+                             <!-- Criterion 3: API Usage -->
+                            <div>
+                                <label for="scoreApiUsage" class="block text-sm font-medium mb-1">3. Use of Galactic Archives API</label>
+                                <div class="flex items-center space-x-3">
+                                   <span class="text-xs text-gray-400">1</span>
+                                   <input type="range" id="scoreApiUsage" name="scoreApiUsage" min="1" max="10" step="1" value="5" required class="w-full">
+                                   <span class="text-xs text-gray-400">10</span>
+                                   <span id="apiUsageValue" class="text-sm font-semibold w-8 text-right">5</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Effective and meaningful integration.</p>
+                            </div>
+                            <!-- Criterion 4: Presentation -->
+                            <div>
+                                <label for="scorePresentation" class="block text-sm font-medium mb-1">4. Presentation & Demo Quality</label>
+                                 <div class="flex items-center space-x-3">
+                                   <span class="text-xs text-gray-400">1</span>
+                                   <input type="range" id="scorePresentation" name="scorePresentation" min="1" max="10" step="1" value="5" required class="w-full">
+                                   <span class="text-xs text-gray-400">10</span>
+                                   <span id="presentationValue" class="text-sm font-semibold w-8 text-right">5</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Clarity, effectiveness, understanding conveyed.</p>
+                            </div>
+                            <!-- Criterion 5: Impact -->
+                            <div>
+                                <label for="scoreImpact" class="block text-sm font-medium mb-1">5. Overall Impact & Potential</label>
+                                 <div class="flex items-center space-x-3">
+                                   <span class="text-xs text-gray-400">1</span>
+                                   <input type="range" id="scoreImpact" name="scoreImpact" min="1" max="10" step="1" value="5" required class="w-full">
+                                   <span class="text-xs text-gray-400">10</span>
+                                    <span id="impactValue" class="text-sm font-semibold w-8 text-right">5</span>
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Significance, future potential, real-world application.</p>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Comments -->
+                    <fieldset class="mb-8">
+                         <h2 class="text-xl font-bold mb-4">Feedback & Comments</h2>
+                         <div>
+                            <label for="comments" class="block text-sm font-medium mb-1">Overall Feedback</label>
+                            <textarea id="comments" name="comments" rows="5" class="w-full p-2 border" placeholder="Provide constructive feedback..."></textarea>
+                         </div>
+                    </fieldset>
+
+                    <!-- Submission Message Area -->
+                    <div id="submissionMessage" class="text-center mb-4 hidden"></div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" id="submitBtn" class="action-button">
+                            Submit Judgment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Form Interaction & Submission ---
+        const form = document.getElementById('judgingForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const submissionMessage = document.getElementById('submissionMessage');
+        const sliders = [
+            { id: 'scoreInnovation', valueId: 'innovationValue' },
+            { id: 'scoreTechnical', valueId: 'technicalValue' },
+            { id: 'scoreApiUsage', valueId: 'apiUsageValue' },
+            { id: 'scorePresentation', valueId: 'presentationValue' },
+            { id: 'scoreImpact', valueId: 'impactValue' },
+        ];
+
+        // Initialize sliders
+        sliders.forEach(sliderInfo => {
+            const slider = document.getElementById(sliderInfo.id);
+            const valueSpan = document.getElementById(sliderInfo.valueId);
+            if (slider && valueSpan) {
+                valueSpan.textContent = slider.value; // Initial display
+                slider.addEventListener('input', (event) => {
+                    valueSpan.textContent = event.target.value;
+                });
+            }
+        });
+
+        // Form Submission Handler
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            submissionMessage.textContent = '';
+            submissionMessage.className = 'text-center mb-4 hidden'; // Reset classes
+
+            const formData = new FormData(form);
+            const judgingData = {
+                judgeName: formData.get('judgeName'),
+                teamName: formData.get('teamName'),
+                hackathonTrack: formData.get('hackathonTrack'),
+                scores: {
+                    innovation: parseInt(formData.get('scoreInnovation'), 10),
+                    technical: parseInt(formData.get('scoreTechnical'), 10),
+                    apiUsage: parseInt(formData.get('scoreApiUsage'), 10),
+                    presentation: parseInt(formData.get('scorePresentation'), 10),
+                    impact: parseInt(formData.get('scoreImpact'), 10),
+                },
+                comments: formData.get('comments'),
+                submissionTimestamp: new Date().toISOString()
+            };
+
+            console.log('Judging Data Payload:', JSON.stringify(judgingData, null, 2));
+
+            const backendUrl = 'https://galarc-judge-backend.onrender.com/api/submit-judging';
+
+            try {
+                const response = await fetch(backendUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(judgingData),
+                });
+
+                if (!response.ok) {
+                    let errorMsg = `HTTP error! status: ${response.status}`;
+                    try { const errorData = await response.json(); errorMsg += ` - ${errorData.detail || errorData.message || 'No details.'}`; } catch (e) { /* ignore */ }
+                    throw new Error(errorMsg);
+                }
+
+                const result = await response.json();
+                submissionMessage.textContent = result.message || 'Judgment submitted successfully!';
+                submissionMessage.className = 'text-center mb-4 text-green-400';
+                form.reset();
+                sliders.forEach(s => {
+                    const sliderEl = document.getElementById(s.id);
+                    const valueEl = document.getElementById(s.valueId);
+                    if(sliderEl) sliderEl.value = '5';
+                    if(valueEl) valueEl.textContent = '5';
+                });
+
+            } catch (error) {
+                console.error('Submission failed:', error);
+                submissionMessage.textContent = `Submission failed: ${error.message}.`;
+                submissionMessage.className = 'text-center mb-4 text-red-400';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Judgment';
+            }
+        });
+    </script>
+
+</body>
+</html>
+
