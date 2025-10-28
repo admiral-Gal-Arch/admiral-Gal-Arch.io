@@ -35,24 +35,33 @@
                     <p class="text-indigo-300 mt-2 info">Secure your place on the mission by filling out the below information.</p>
                 </div>
               
-                <form class="reg-form space-y-6" action="https://api.web3forms.com/submit" method="POST">
+                <!-- Updated Zoho Form -->
+                <form class="reg-form space-y-6" action='https://forms.zohopublic.eu/galacticarchives1/form/Registration/formperma/yZ3AOiYGD-BpbtYcxxy6L8p0kYyXuIfUmlvRwe9ZF8c/htmlRecords/submit' name='form' id='form' method='POST' accept-charset='UTF-8' enctype='multipart/form-data'>
                     
-                    <input type="hidden" name="access_key" value="8beb21cb-4326-4d6c-9f10-e2098582ccc8">
-                    <input type="hidden" name="subject" value="New Mission Registration from Galactic Archives">
-                    <input type="hidden" name="from_name" value="Galactic Archives Site">
+                    <!-- Zoho Hidden Inputs -->
+                    <input type="hidden" name="zf_referrer_name" value=""><!-- To Track referrals , place the referrer name within the " " in the above hidden input field -->
+                    <input type="hidden" name="zf_redirect_url" value="https://galacticarchives.space"><!-- To redirect to a specific page after record submission , place the respective url within the " " in the above hidden input field -->
+                    <input type="hidden" name="zc_gad" value=""><!-- If GCLID is enabled in Zoho CRM Integration, click details of AdWords Ads will be pushed to Zoho CRM -->
 
+                    <!-- Full Name -->
                     <div class="form-group">
-                        <label for="name" class="form-label">Full Name</label>
-                        <input id="name" name="name" class="form-input" placeholder="Your full name" type="text" required />
+                        <label for="SingleLine" class="form-label">Full Name <em>*</em></label>
+                        <input id="SingleLine" type="text" name="SingleLine" value="" class="form-input" fieldType=1 maxlength="255" placeholder="First and Last Name" required />
                     </div>
+
+                    <!-- Educational Institute -->
                     <div class="form-group">
-                        <label for="email" class="form-label">Your Academic Email</label>
-                        <input id="email" name="email" class="form-input" placeholder="e.g., student.name@university.ac.uk" type="email" required />
+                        <label for="SingleLine1" class="form-label">Educational Institute <em>*</em></label>
+                        <input id="SingleLine1" type="text" name="SingleLine1" value="" class="form-input" fieldType=1 maxlength="255" placeholder="Name of College or University" required />
                     </div>
+
+                    <!-- Email -->
                     <div class="form-group">
-                        <label for="institute" class="form-label">College or University</label>
-                        <input id="institute" name="institute" class="form-input" placeholder="e.g., University of Manchester" type="text" required />
+                        <label for="Email" class="form-label">Your Academic Email <em>*</em></label>
+                        <input id="Email" type="text" maxlength="255" name="Email" value="" class="form-input" fieldType=9 placeholder="Your email from you college or Uni" required />
                     </div>
+
+                    <!-- Submit Button -->
                     <div class="text-center pt-4">
                         <button class="submit-btn" type="submit">Send Transmission</button>
                     </div>
@@ -67,3 +76,4 @@
 
 </body>
 </html>
+
