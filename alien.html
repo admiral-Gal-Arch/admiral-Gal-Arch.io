@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track: Alien Artifacts Division</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter for body, Orbitron for headings -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom styles copied from index.html */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0a1f;
+            background-image: radial-gradient(circle at 20% 30%, rgba(129, 140, 248, 0.1) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.1) 0%, transparent 40%);
+            color: #e0e7ff;
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .glow-text { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 0 0 20px rgba(167, 139, 250, 0.7); }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #818cf8 0%, #c084fc 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(192, 132, 252, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(192, 132, 252, 0.6);
+        }
+    </style>
+</head>
+<body class="text-indigo-100">
+
+    <!-- Navigation -->
+    <nav class="my-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <a href="index.html" class="inline-block glass-card text-indigo-200 hover:text-white hover:border-violet-400 transition-all duration-300 py-2 px-5 rounded-full">
+                &larr; Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+
+        <!-- Header Section -->
+        <header class="text-center py-12 px-4">
+            <h1 class="font-orbitron text-5xl md:text-6xl font-bold uppercase tracking-widest text-white glow-text">Alien Artifacts Division</h1>
+            <p class="mt-4 text-xl md:text-2xl text-indigo-300 font-light">Focus: Creative, Fun, and Novel Applications</p>
+        </header>
+
+        <!-- Main Content Section -->
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- Detailed Description -->
+            <section class="my-16">
+                <div class="glass-card rounded-2xl p-8 md:p-12">
+                    <h2 class="font-orbitron text-3xl font-bold text-white mb-6">Mission Details</h2>
+                    <div class="space-y-4 text-lg text-indigo-200 leading-relaxed">
+                        <p>This is the "wildcard" track. Your mission is to build the weird, wonderful, and unexpected artifacts that future explorers might find. This track is less about pure scientific accuracy and more about user experience, art, and answering "what if?"</p>
+                        <p>If you have a strange idea that combines space data with music, poetry, or a fun game, this is your track. We challenge you to surprise us by mixing APIs in ways nobody else has thought of. Create something delightful, strange, or just plain fun.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project Ideas -->
+            <section class="my-16">
+                <h2 class="font-orbitron text-4xl font-bold text-center text-white mb-12">Potential Project Vectors</h2>
+                <div class="glass-card rounded-2xl p-8 md:p-12">
+                    <ul class="list-disc list-inside space-y-4 text-indigo-200 text-lg">
+                        <li>
+                            <strong class="text-white">Ship's Computer Interface:</strong> Recreate the LCARS interface from Star Trek, but hook it up to the live NASA/SpaceX APIs to show *real* ship (ISS) status and "stellar" phenomena (APOD).
+                        </li>
+                        <li>
+                            <strong class="text-white">APOD-Poet:</strong> An app that pulls the Astronomy Picture of the Day, analyzes it with a vision model, and uses a text-generation AI to write a short, unique poem about the image.
+                        </li>
+                        <li>
+                            <strong class="text-white">Mars Rover "Postcards":</strong> A fun app that lets you pick a real Mars Rover photo, add a "Wish you were here!" filter, and write a message to send to friends.
+                        </li>
+                        <li>
+                            <strong class="text-white">Exoplanet "Real Estate":</strong> A humorous Zillow-style app for browsing exoplanets, complete with generated descriptions of their "amenities" and "drawbacks."
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Example Project -->
+            <section class="my-16">
+                <h2 class="font-orbitron text-4xl font-bold text-center text-white mb-12">Example Project: 'Stellar Radio'</h2>
+                <div class="glass-card rounded-2xl p-8 md:p-12 border-t-4 border-violet-500">
+                    <h3 class="font-orbitron text-2xl font-bold text-white mb-4">Concept: Generative "Space Radio"</h3>
+                    <p class="text-lg text-indigo-200 leading-relaxed mb-6">A generative "space radio" application that creates ambient music and atmospheric soundscapes based on real-time cosmic data. The user tunes a dial, not to a frequency, but to a data source.</p>
+                    
+                    <h4 class="font-orbitron text-xl font-bold text-white mb-3 mt-6">Core Features:</h4>
+                    <ul class="list-disc list-inside space-y-2 text-indigo-200 text-lg">
+                        <li>Uses `Tone.js` or a similar web audio library to create sound.</li>
+                        <li>The "bassline" or "drone" is driven by the ISS's current orbital speed or altitude.</li>
+                        <li>"Melodies" or "pings" are generated from (simulated) pulsar data, creating a cosmic rhythm.</li>
+                        <li>"Static" or "flares" in the music are triggered by real-time solar weather events from the DONKI API.</li>
+                        <li>The UI looks like an old-fashioned analog radio tuner.</li>
+                    </ul>
+
+                    <h4 class="font-orbitron text-xl font-bold text-white mb-3 mt-6">Data Feeds:</h4>
+                    <p class="text-indigo-200 text-lg">Open Notify (for ISS data), NASA DONKI (for solar flares), and a static dataset of pulsar timings.</p>
+                </div>
+            </section>
+
+            <!-- Registration Button -->
+            <section class="my-16 text-center">
+                <a href="/registration.html" class="btn-primary text-white font-bold py-4 px-10 rounded-full text-xl uppercase tracking-wider">
+                    Register for Mission
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 border-t border-indigo-900/50">
+        <p class="text-indigo-400">&copy; 2025 Stellar Command. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
+
+
+
+
