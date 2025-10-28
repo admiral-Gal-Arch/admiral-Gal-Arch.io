@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Galactic Archives Hackathon</title>
-    <!-- Tailwind CSS for styling -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter for body, Orbitron for headings -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,76 +12,40 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* Custom styles for the space theme */
+        /* Custom styles for the page */
         body {
             font-family: 'Inter', sans-serif;
-            /* Starry night/deep space background */
-            background-color: #0c0a1f; /* Deep dark blue */
+            /* Deep space blue/purple background */
+            background-color: #0c0a1f; 
+            /* Subtle nebula/galaxy effects */
             background-image: radial-gradient(circle at 20% 30%, rgba(129, 140, 248, 0.1) 0%, transparent 40%),
                               radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.1) 0%, transparent 40%);
-            color: #e0e7ff; /* Light indigo text */
+            color: #e0e7ff; /* Light indigo text for readability */
         }
-
-        /* Custom font for headings */
-        .font-orbitron {
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        /* Glowing text effect for main title */
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
         .glow-text {
-            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 
-                         0 0 20px rgba(167, 139, 250, 0.7);
+            /* Creates a neon "glow" effect for titles */
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 0 0 20px rgba(167, 139, 250, 0.7);
         }
-
-        /* Glassmorphism card effect */
         .glass-card {
-            background: rgba(17, 24, 39, 0.6); /* Dark glass */
+            /* Frosted glass effect for cards */
+            background: rgba(17, 24, 39, 0.6); /* Semi-transparent dark blue */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem; /* 16px */
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border-radius: 1rem; /* Rounded corners */
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Soft shadow */
         }
-        
-        /* Primary button style */
         .btn-primary {
+            /* Gradient button styling */
             background: linear-gradient(90deg, #818cf8 0%, #c084fc 100%);
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(192, 132, 252, 0.4);
         }
         .btn-primary:hover {
+            /* Hover effect for buttons */
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(192, 132, 252, 0.6);
-        }
-        
-        /* Loader animation */
-        .loader {
-            border: 4px solid rgba(255, 255, 255, 0.2);
-            border-left-color: #c084fc;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Modal styles */
-        .modal-overlay {
-            transition: opacity 0.3s ease;
-        }
-        .modal-content {
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        /* Show modal */
-        .modal-overlay.opacity-100 {
-            pointer-events: auto;
-        }
-        .modal-overlay.opacity-100 .modal-content {
-            transform: scale(1);
-            opacity: 1;
         }
     </style>
 </head>
@@ -92,92 +56,82 @@
         <h1 class="font-orbitron text-5xl md:text-7xl font-bold uppercase tracking-widest text-white glow-text">The Galactic Archives</h1>
         <p class="mt-4 text-xl md:text-2xl text-indigo-300 font-light">Your Mission: Explore the Final Data Frontier.</p>
         <div class="mt-12">
-            <!-- Registration button -->
-            <a href="#registration" class="btn-primary text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider">Register for Mission</a>
+            <!-- Main Call to Action Button -->
+            <a href="registration.html" class="btn-primary text-white font-bold py-3 px-8 rounded-full text-lg uppercase tracking-wider">Register for Mission</a>
         </div>
     </header>
 
-    <!-- Navigation -->
-    <nav class="sticky top-4 z-50 mb-16">
-        <div class="flex justify-center items-center p-4 glass-card rounded-full max-w-lg mx-auto">
+    <!-- Navigation Menu -->
+    <nav class="mb-16">
+        <div class="flex justify-center items-center p-6 glass-card rounded-full max-w-xl mx-auto">
             <div class="flex space-x-8 text-lg">
-                <a href="#briefing" class="text-white hover:text-indigo-300 hover:scale-105 transition-all duration-300">Briefing</a>
-                <a href="#archives" class="text-indigo-300 hover:text-white hover:scale-105 transition-all duration-300">Archives</a>
-                <a href="#tracks" class="text-indigo-300 hover:text-white hover:scale-105 transition-all duration-300">Tracks</a>
+                <a href="index.html" class="text-white font-bold hover:text-indigo-300 hover:scale-105 transition-all duration-300">Home</a>
+                <a href="registration.html" class="text-indigo-300 hover:text-white hover:scale-105 transition-all duration-300">Registration</a>
+                <!-- Example of other links, can be modified -->
                 <a href="#schedule" class="text-indigo-300 hover:text-white hover:scale-105 transition-all duration-300">Schedule</a>
             </div>
         </div>
     </nav>
 
+    <!-- Main Content Area -->
     <main class="container mx-auto px-4 sm:px-6 lg:px-8 pb-24">
 
         <!-- Mission Briefing Section -->
-        <section id="briefing" class="my-16 scroll-mt-24">
+        <section id="briefing" class="my-16">
             <div class="glass-card rounded-2xl p-8 md:p-12 text-center max-w-4xl mx-auto">
                 <h2 class="font-orbitron text-3xl font-bold text-white mb-4">Mission Briefing</h2>
                 <p class="text-lg text-indigo-200 leading-relaxed">
                     Greetings, Data Explorer. You have been granted top-level clearance to the newly declassified Galactic Archives. Your mission, assigned by Stellar Command, is to venture into this vast cosmic data. Analyze, visualize, and build groundbreaking applications from these data streams. The fate of future exploration is in your hands. Good luck.
                 </p>
-                <!-- Container for Gemini-powered ideas -->
-                <div id="idea-container" class="mt-8 hidden">
-                    <h4 class="font-orbitron text-xl font-bold text-white mb-4">Advisor's Suggestion</h4>
-                    <!-- Loader -->
-                    <div id="idea-loader" class="flex justify-center items-center py-4">
-                        <div class="loader"></div>
-                    </div>
-                    <!-- Content from API -->
-                    <div id="idea-content" class="glass-card border border-violet-400 rounded-lg p-6 text-left hidden text-indigo-200">
-                    </div>
-                </div>
             </div>
         </section>
         
-        <hr class="border-indigo-800/50 my-16">
+        <hr class="border-indigo-800/50">
 
-        <!-- Declassified Archive Streams Section -->
-        <section id="archives" class="my-20 scroll-mt-24">
+        <!-- Archive Streams Section -->
+        <section id="archives" class="my-20">
             <h2 class="font-orbitron text-4xl font-bold text-center text-white mb-12">Declassified Archive Streams</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- NASA API Card -->
-                <div class="glass-card rounded-xl p-6 text-center shadow-lg hover:border-violet-400 transition-all duration-300">
-                    <img src="https://placehold.co/400x200/0c0a1f/c084fc?text=NASA+Logo&font=orbitron" alt="NASA Logo Placeholder" class="h-16 w-auto mx-auto mb-4 object-contain rounded">
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg transform transition-all duration-300 hover:scale-105 hover:border-violet-400">
+                    <img src="https://placehold.co/100x100/FFFFFF/0c0a1f?text=NASA" alt="NASA Logo" class="h-16 mx-auto mb-4 object-contain rounded-full" onerror="this.src='https://placehold.co/100x100/FFFFFF/0c0a1f?text=NASA'">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-2">NASA Open APIs</h3>
                     <p class="text-indigo-300 text-sm">Access planetary data, high-res imagery (APOD), and mission logs from deep space operations.</p>
                 </div>
                 <!-- SpaceX API Card -->
-                <div class="glass-card rounded-xl p-6 text-center shadow-lg hover:border-violet-400 transition-all duration-300">
-                    <img src="https://placehold.co/400x200/0c0a1f/c084fc?text=SpaceX+Logo&font=orbitron" alt="SpaceX Logo Placeholder" class="h-16 w-auto mx-auto mb-4 object-contain rounded">
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg transform transition-all duration-300 hover:scale-105 hover:border-violet-400">
+                    <img src="https://placehold.co/100x100/FFFFFF/0c0a1f?text=SpaceX" alt="SpaceX Logo" class="h-16 mx-auto mb-4 object-contain rounded-full" onerror="this.src='https://placehold.co/100x100/FFFFFF/0c0a1f?text=SpaceX'">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-2">SpaceX Launch Data</h3>
                     <p class="text-indigo-300 text-sm">Utilize real-time and historical data on rockets, launches, cores, and payloads for visualization and modeling.</p>
                 </div>
                 <!-- ISS API Card -->
-                <div class="glass-card rounded-xl p-6 text-center shadow-lg hover:border-violet-400 transition-all duration-300">
-                    <img src="https://placehold.co/400x200/0c0a1f/c084fc?text=ISS+Logo&font=orbitron" alt="ISS Logo Placeholder" class="h-16 w-auto mx-auto mb-4 object-contain rounded">
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg transform transition-all duration-300 hover:scale-105 hover:border-violet-400">
+                    <img src="https://placehold.co/100x100/FFFFFF/0c0a1f?text=ISS" alt="ISS Logo" class="h-16 mx-auto mb-4 object-contain rounded-full" onerror="this.src='https://placehold.co/100x100/FFFFFF/0c0a1f?text=ISS'">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-2">ISS Live Location</h3>
                     <p class="text-indigo-300 text-sm">Track the International Space Station's current position and overpass predictions for global locations.</p>
                 </div>
                 <!-- Bonus API Card -->
-                <div class="glass-card rounded-xl p-6 text-center shadow-lg hover:border-yellow-400 transition-all duration-300">
-                    <svg class="mx-auto mb-4 w-16 h-16 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="glass-card rounded-xl p-6 text-center shadow-lg transform transition-all duration-300 hover:scale-105 hover:border-violet-400">
+                     <img src="https://placehold.co/100x100/FFFFFF/0c0a1f?text=?" alt="Mystery Logo" class="h-16 mx-auto mb-4 object-contain rounded-full" onerror="this.src='https://placehold.co/100x100/FFFFFF/0c0a1f?text=?'">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-2">Bonus Archive</h3>
                     <p class="text-indigo-300 text-sm">A mystery API will be revealed on Day 1 to challenge your creative integration skills.</p>
                 </div>
             </div>
         </section>
         
-        <hr class="border-indigo-800/50 my-16">
+        <hr class="border-indigo-800/50">
 
         <!-- Specialization Tracks Section -->
-        <section id="tracks" class="my-20 scroll-mt-24">
+        <section id="tracks" class="my-20">
             <h2 class="font-orbitron text-4xl font-bold text-center text-white mb-12">Choose Your Specialization</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- AI/ML Track Card -->
+                <!-- AI Track Card -->
                 <div class="glass-card rounded-2xl p-8 text-center flex flex-col justify-between">
                     <div>
                         <h3 class="font-orbitron text-2xl font-bold text-white mb-4">The Astrogator's AI</h3>
                         <p class="text-indigo-300 mb-6">Build predictive models and intelligent systems using deep space and launch data. **(AI/ML Focus)**</p>
                     </div>
-                    <button data-track="AI" class="btn-primary text-sm py-2 px-4 rounded-full uppercase tracking-wider font-semibold w-full mt-4">Get AI/ML Advice</button>
+                    <a href="ai.html" class="btn-primary text-white text-sm py-2 px-4 rounded-full uppercase tracking-wider mt-4">Learn More &rarr;</a>
                 </div>
                 <!-- Visualization Track Card -->
                 <div class="glass-card rounded-2xl p-8 text-center flex flex-col justify-between">
@@ -185,7 +139,7 @@
                         <h3 class="font-orbitron text-2xl font-bold text-white mb-4">The Celestial Cartographer</h3>
                         <p class="text-indigo-300 mb-6">Create stunning and interactive data visualizations to map, track, and interpret cosmic events. **(Visualization Focus)**</p>
                     </div>
-                    <button data-track="Visualization" class="btn-primary text-sm py-2 px-4 rounded-full uppercase tracking-wider font-semibold w-full mt-4">Get Visualization Advice</button>
+                    <a href="celestial.html" class="btn-primary text-white text-sm py-2 px-4 rounded-full uppercase tracking-wider mt-4">Learn More &rarr;</a>
                 </div>
                 <!-- Creative Track Card -->
                 <div class="glass-card rounded-2xl p-8 text-center flex flex-col justify-between">
@@ -193,23 +147,23 @@
                         <h3 class="font-orbitron text-2xl font-bold text-white mb-4">Alien Artifacts Division</h3>
                         <p class="text-indigo-300 mb-6">Focus on novelty and user experience, combining APIs in surprising ways for a creative new application. **(Creative Tech Focus)**</p>
                     </div>
-                    <button data-track="Creative" class="btn-primary text-sm py-2 px-4 rounded-full uppercase tracking-wider font-semibold w-full mt-4">Get Creative Advice</button>
+                    <a href="alien.html" class="btn-primary text-white text-sm py-2 px-4 rounded-full uppercase tracking-wider mt-4">Learn More &rarr;</a>
                 </div>
             </div>
         </section>
 
-        <hr class="border-indigo-800/50 my-16">
+        <hr class="border-indigo-800/50">
 
         <!-- Mission Itinerary Section -->
-        <section id="schedule" class="my-20 scroll-mt-24">
+        <section id="schedule" class="my-20">
             <h2 class="font-orbitron text-4xl font-bold text-center text-white mb-12">Mission Itinerary (10 AM - 5 PM Daily)</h2>
             <p class="text-lg text-indigo-200 text-center mb-10">The Galactic Archives Hackathon runs from **24/11/2025 - 28/11/2025** (5 Days). Core activities are scheduled below.</p>
-            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8">
                 <!-- Day 1 Card -->
                 <div class="glass-card rounded-xl p-6 text-center border-t-4 border-violet-500">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-1">Day 1: Launch</h3>
                     <p class="text-sm text-indigo-400 mb-3">24/11/2025</p>
-                    <ul class="text-sm text-indigo-200 space-y-2 text-left">
+                    <ul class="text-sm text-indigo-200 space-y-1 text-left">
                         <li>**10:00** Mission Briefing</li>
                         <li>**11:00** Team Formation</li>
                         <li>**14:00** Technical Workshops</li>
@@ -220,7 +174,7 @@
                 <div class="glass-card rounded-xl p-6 text-center border-t-4 border-violet-500">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-1">Day 2: Build</h3>
                     <p class="text-sm text-indigo-400 mb-3">25/11/2025</p>
-                    <ul class="text-sm text-indigo-200 space-y-2 text-left">
+                    <ul class="text-sm text-indigo-200 space-y-1 text-left">
                         <li>**10:00** Coding Begins</li>
                         <li>**13:00** Mentor Office Hours</li>
                         <li>**15:00** Mid-day Checkpoint</li>
@@ -231,7 +185,7 @@
                 <div class="glass-card rounded-xl p-6 text-center border-t-4 border-violet-500">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-1">Day 3: Deep Dive</h3>
                     <p class="text-sm text-indigo-400 mb-3">26/11/2025</p>
-                    <ul class="text-sm text-indigo-200 space-y-2 text-left">
+                    <ul class="text-sm text-indigo-200 space-y-1 text-left">
                         <li>**10:00** Specialized Workshops</li>
                         <li>**12:00** Command Lunch & Learn</li>
                         <li>**14:00** Team Consultations</li>
@@ -242,7 +196,7 @@
                 <div class="glass-card rounded-xl p-6 text-center border-t-4 border-violet-500">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-1">Day 4: Polish</h3>
                     <p class="text-sm text-indigo-400 mb-3">27/11/2025</p>
-                    <ul class="text-sm text-indigo-200 space-y-2 text-left">
+                    <ul class="text-sm text-indigo-200 space-y-1 text-left">
                         <li>**10:00** Final Coding Sprint</li>
                         <li>**13:00** Submission Review Guide</li>
                         <li>**15:00** Project Documentation</li>
@@ -253,7 +207,7 @@
                 <div class="glass-card rounded-xl p-6 text-center border-t-4 border-yellow-400">
                     <h3 class="font-orbitron text-xl font-bold text-white mb-1">Day 5: Debrief</h3>
                     <p class="text-sm text-indigo-400 mb-3">28/11/2025</p>
-                    <ul class="text-sm text-indigo-200 space-y-2 text-left">
+                    <ul class="text-sm text-indigo-200 space-y-1 text-left">
                         <li>**10:00** Final Submissions Due</li>
                         <li>**12:00** Technical Judging</li>
                         <li>**15:00** Awards Ceremony</li>
@@ -270,230 +224,11 @@
         <p class="text-indigo-400">&copy; 2025 Stellar Command. All rights reserved.</p>
     </footer>
 
-    <!-- Advice Modal -->
-    <div id="advice-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none">
-        <div id="modal-content-box" classm="modal-content glass-card rounded-2xl p-8 max-w-2xl w-full transform scale-95 opacity-0">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="modal-title" class="font-orbitron text-2xl font-bold text-white">Track Advisor</h3>
-                <button id="close-modal-btn" class="text-3xl font-bold text-indigo-300 hover:text-white leading-none">&times;</button>
-            </div>
-            <div id="modal-body">
-                <!-- Modal Loader -->
-                <div id="modal-loader" class="flex justify-center items-center py-8">
-                    <div class="loader"></div>
-                </div>
-                <!-- Modal Content -->
-                <div id="modal-advice-content" class="text-indigo-200 leading-relaxed hidden">
-                    <!-- Content will be injected by JavaScript -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById('advice-modal');
-            const modalContentBox = document.getElementById('modal-content-box');
-            const modalTitle = document.getElementById('modal-title');
-            const modalLoader = document.getElementById('modal-loader');
-            const modalAdviceContent = document.getElementById('modal-advice-content');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            
-            // --- Gemini API Call Function ---
-            const ideaContainer = document.getElementById('idea-container');
-            const ideaLoader = document.getElementById('idea-loader');
-            const ideaContent = document.getElementById('idea-content');
-
-            // System prompt for the mission briefing section
-            const briefingSystemPrompt = `
-                You are Stellar Command's AI Advisor. Your task is to provide one single, creative, and inspiring project idea for a hackathon participant. 
-                The hackathon is called "The Galactic Archives" and focuses on using space APIs (NASA, SpaceX, ISS).
-                The idea should be concise (2-3 sentences) and related to exploring or visualizing space data.
-                Start the response with a bolded title for the project idea.
-                Example: "**Project Ares:** Build a real-time dashboard...`
-            
-            // System prompt for the track advisor modal
-            const advisorSystemPrompt = `
-                You are a "Track Advisor" AI for the Galactic Archives hackathon. 
-                Your role is to provide specific, actionable advice for a chosen hackathon track.
-                The advice should be a bulleted list (2-3 bullets) of project ideas or key technologies to explore for that track.
-                Keep the response concise and focused. Do not add introductory or concluding sentences.
-                - **For 'AI' track:** Suggest an AI/ML project (e.G., predicting solar flares, classifying mars rover images).
-                - **For 'Visualization' track:** Suggest a data-viz project (e.g., a 3D exoplanet map, a real-time ISS tracker).
-                - **For 'Creative' track:** Suggest a novel app (e.g., an "alien" music generator from pulsar data, a "ship's log" app).`
-
-            const apiKey = ""; // API key is handled by the environment
-            // *** FIX: Corrected the API endpoint URL ***
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-
-            /**
-             * Makes a call to the Gemini API with exponential backoff.
-             * @param {string} prompt The user prompt.
-             * @param {string} systemPrompt The system instruction.
-             * @param {number} maxRetries Maximum number of retries.
-             * @returns {Promise<string>} The generated text.
-             */
-            async function callGeminiApi(prompt, systemPrompt, maxRetries = 3) {
-                const payload = {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    systemInstruction: {
-                        parts: [{ text: systemPrompt }]
-                    },
-                };
-
-                let attempt = 0;
-                while (attempt < maxRetries) {
-                    try {
-                        const response = await fetch(apiUrl, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-
-                        if (!response.ok) {
-                            // Log detailed error for debugging
-                            const errorBody = await response.text();
-                            console.error(`HTTP error! status: ${response.status}`, errorBody);
-                            throw new Error(`HTTP error! status: ${response.status}`);
-                        }
-
-                        const result = await response.json();
-                        
-                        if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts[0].text) {
-                            return result.candidates[0].content.parts[0].text;
-                        } else {
-                            // Log if response structure is unexpected
-                            console.error("Invalid API response structure:", result);
-                            throw new Error("Invalid API response structure.");
-                        }
-
-                    } catch (error) {
-                        attempt++;
-                        if (attempt >= maxRetries) {
-                            console.error("Gemini API call failed after max retries:", error);
-                            return "Error: Unable to contact Stellar Command. Please try again later.";
-                        }
-                        const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
-                        // Don't log retry attempts as errors
-                        // console.log(`Retrying API call (attempt ${attempt})...`);
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                    }
-                }
-            }
-
-            /**
-             * Fetches and displays the initial project idea for the briefing section.
-             */
-            async function getBriefingIdea() {
-                ideaContainer.style.display = 'block';
-                ideaLoader.style.display = 'flex';
-                ideaContent.style.display = 'none';
-
-                const prompt = "Give me one inspiring project idea for the Galactic Archives hackathon.";
-                const adviceText = await callGeminiApi(prompt, briefingSystemPrompt);
-
-                // Use innerHTML to render markdown (like bolding)
-                ideaContent.innerHTML = adviceText.replace(/\n/g, '<br>'); 
-                
-                ideaLoader.style.display = 'none';
-                ideaContent.style.display = 'block';
-            }
-
-            /**
-             * Opens the modal and fetches advice for the selected track.
-             * @param {string} track - The track name ('AI', 'Visualization', 'Creative').
-             */
-            async function openModal(track) {
-                // Set modal title
-                let trackName = "Advisor";
-                if (track === 'AI') trackName = "Astrogator's AI";
-                if (track === 'Visualization') trackName = "Celestial Cartographer";
-                if (track === 'Creative') trackName = "Alien Artifacts Division";
-                modalTitle.textContent = `${trackName} Advisor`;
-
-                // Reset modal state
-                modalAdviceContent.style.display = 'none';
-                modalLoader.style.display = 'flex';
-                modal.classList.add('opacity-100');
-                modal.classList.remove('pointer-events-none');
-                modalContentBox.classList.add('opacity-100', 'scale-100');
-
-                // Fetch advice
-                const prompt = `What advice do you have for the '${track}' track?`;
-                const adviceText = await callGeminiApi(prompt, advisorSystemPrompt);
-
-                // Use innerHTML to render markdown (lists, bolding)
-                // Added a fix to handle lists more robustly
-                let htmlText = adviceText
-                    .replace(/\* \*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') // Bold text
-                    .replace(/\* (.*?)(?=\n\*|$)/g, '<li class="mb-2">$1</li>'); // List items
-                
-                if (htmlText.includes('<li')) {
-                    htmlText = `<ul class="list-disc list-inside">${htmlText}</ul>`;
-                }
-                
-                modalAdviceContent.innerHTML = htmlText.replace(/\n/g, '<br>');
-
-
-                // Show content
-                modalLoader.style.display = 'none';
-                modalAdviceContent.style.display = 'block';
-            }
-
-            /**
-             * Closes the modal.
-             */
-            function closeModal() {
-                modal.classList.remove('opacity-100');
-                modal.classList.add('pointer-events-none');
-                modalContentBox.classList.remove('opacity-100', 'scale-100');
-            }
-
-            // --- Event Listeners ---
-
-            // Add click listeners to all track buttons
-            document.querySelectorAll('button[data-track]').forEach(button => {
-                button.addEventListener('click', () => {
-                    const track = button.getAttribute('data-track');
-                    openModal(track);
-                });
-            });
-
-            // Close modal events
-            closeModalBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                // Close if clicking on the overlay, but not the content box
-                if (e.target === modal) {
-                    closeModal();
-                }
-            });
-
-            // Close modal with Escape key
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    closeModal();
-                }
-            });
-
-            // Smooth scrolling for nav links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    if(targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
-                });
-            });
-
-            // --- Initial Page Load ---
-            // Fetch the initial briefing idea when the page loads
-            getBriefingIdea();
-        });
-    </script>
+    <!-- 
+        REMOVED SCRIPT BLOCK:
+        - All JavaScript related to the Gemini API (callGeminiApi, getBriefingIdea) has been removed.
+        - The associated event listeners for track buttons and the modal logic have also been removed.
+    -->
 
 </body>
 </html>
