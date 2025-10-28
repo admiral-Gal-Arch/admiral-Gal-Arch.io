@@ -323,7 +323,8 @@
                 - **For 'Creative' track:** Suggest a novel app (e.g., an "alien" music generator from pulsar data, a "ship's log" app).`
 
             const apiKey = ""; // API key is handled by the environment
-            const apiUrl = `https://generativethinking.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            // *** FIX: Corrected the API endpoint URL ***
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
             /**
              * Makes a call to the Gemini API with exponential backoff.
@@ -350,6 +351,9 @@
                         });
 
                         if (!response.ok) {
+                            // Log detailed error for debugging
+                            const errorBody = await response.text();
+                            console.error(`HTTP error! status: ${response.status}`, errorBody);
                             throw new Error(`HTTP error! status: ${response.status}`);
                         }
 
@@ -358,6 +362,8 @@
                         if (result.candidates && result.candidates[0].content && result.candidates[0].content.parts[0].text) {
                             return result.candidates[0].content.parts[0].text;
                         } else {
+                            // Log if response structure is unexpected
+                            console.error("Invalid API response structure:", result);
                             throw new Error("Invalid API response structure.");
                         }
 
@@ -368,6 +374,8 @@
                             return "Error: Unable to contact Stellar Command. Please try again later.";
                         }
                         const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
+                        // Don't log retry attempts as errors
+                        // console.log(`Retrying API call (attempt ${attempt})...`);
                         await new Promise(resolve => setTimeout(resolve, delay));
                     }
                 }
@@ -415,10 +423,17 @@
                 const adviceText = await callGeminiApi(prompt, advisorSystemPrompt);
 
                 // Use innerHTML to render markdown (lists, bolding)
-                modalAdviceContent.innerHTML = adviceText
+                // Added a fix to handle lists more robustly
+                let htmlText = adviceText
                     .replace(/\* \*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') // Bold text
-                    .replace(/\* (.*?)(?=\n\*|$)/g, '<li class="mb-2">$1</li>') // List items
-                    .replace(/<li>/g, '<ul class="list-disc list-inside"><li>'); // Start list
+                    .replace(/\* (.*?)(?=\n\*|$)/g, '<li class="mb-2">$1</li>'); // List items
+                
+                if (htmlText.includes('<li')) {
+                    htmlText = `<ul class="list-disc list-inside">${htmlText}</ul>`;
+                }
+                
+                modalAdviceContent.innerHTML = htmlText.replace(/\n/g, '<br>');
+
 
                 // Show content
                 modalLoader.style.display = 'none';
@@ -482,3 +497,4 @@
 
 </body>
 </html>
+
