@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track: The Astrogator's AI</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter for body, Orbitron for headings -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom styles copied from index.html */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0a1f;
+            background-image: radial-gradient(circle at 20% 30%, rgba(129, 140, 248, 0.1) 0%, transparent 40%),
+                              radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.1) 0%, transparent 40%);
+            color: #e0e7ff;
+        }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .glow-text { text-shadow: 0 0 8px rgba(255, 255, 255, 0.3), 0 0 20px rgba(167, 139, 250, 0.7); }
+        .glass-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #818cf8 0%, #c084fc 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(192, 132, 252, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(192, 132, 252, 0.6);
+        }
+    </style>
+</head>
+<body class="text-indigo-100">
+
+    <!-- Navigation -->
+    <nav class="my-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <a href="index.html" class="inline-block glass-card text-indigo-200 hover:text-white hover:border-violet-400 transition-all duration-300 py-2 px-5 rounded-full">
+                &larr; Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 sm:px-6 lg:px-8 pb-24">
+
+        <!-- Header Section -->
+        <header class="text-center py-12 px-4">
+            <h1 class="font-orbitron text-5xl md:text-6xl font-bold uppercase tracking-widest text-white glow-text">The Astrogator's AI</h1>
+            <p class="mt-4 text-xl md:text-2xl text-indigo-300 font-light">Focus: AI, Machine Learning, and Predictive Models</p>
+        </header>
+
+        <!-- Main Content Section -->
+        <div class="max-w-4xl mx-auto">
+            
+            <!-- Detailed Description -->
+            <section class="my-16">
+                <div class="glass-card rounded-2xl p-8 md:p-12">
+                    <h2 class="font-orbitron text-3xl font-bold text-white mb-6">Mission Details</h2>
+                    <div class="space-y-4 text-lg text-indigo-200 leading-relaxed">
+                        <p>This track is for the data scientists and machine learning engineers. Your mission is to build the "brains" of future space exploration. You'll dive deep into vast datasets to find patterns, make predictions, and create intelligent systems.</p>
+                        <p>If you love neural networks, computer vision, time-series analysis, or generative AI, this is your specialization. We're challenging you to go beyond simple data retrieval and build applications that think, learn, and assist human explorers.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Project Ideas -->
+            <section class="my-16">
+                <h2 class="font-orbitron text-4xl font-bold text-center text-white mb-12">Potential Project Vectors</h2>
+                <div class="glass-card rounded-2xl p-8 md:p-12">
+                    <ul class="list-disc list-inside space-y-4 text-indigo-200 text-lg">
+                        <li>
+                            <strong class="text-white">Pulsar Candidate Sorter:</strong> Train a model to identify pulsar signals from noisy radio data.
+                        </li>
+                        <li>
+                            <strong class="text-white">Mars Rover Anomaly Detector:</strong> Use computer vision to scan Mars Rover photos and flag unusual rock formations, potential debris, or camera artifacts.
+                        </li>
+                        <li>
+                            <strong class="text-white">Solar Flare Predictor:</strong> Use time-series analysis on NASA's DONKI data to predict the likelihood of C- or X-class solar flares in the next 24 hours.
+                        </li>
+                        <li>
+                            <strong class="text-white">Exoplanet Atmosphere Classifier:</strong> Analyze light-curve data from the Exoplanet Archive to make educated guesses about atmospheric composition or habitability.
+                        </li>
+                        <li>
+                            <strong class="text-white">Generative Nebula Art:</strong> Build a Generative Adversarial Network (GAN) trained on APOD images to create new, stunning (and fictional) nebulas and starscapes.
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Example Project -->
+            <section class="my-16">
+                <h2 class="font-orbitron text-4xl font-bold text-center text-white mb-12">Example Project: 'Launch-Link'</h2>
+                <div class="glass-card rounded-2xl p-8 md:p-12 border-t-4 border-violet-500">
+                    <h3 class="font-orbitron text-2xl font-bold text-white mb-4">Concept: Predictive Launch Readiness Score</h3>
+                    <p class="text-lg text-indigo-200 leading-relaxed mb-6">A real-time dashboard that pulls data from multiple sources (SpaceX API, weather APIs) to generate a "launch readiness score." This model would predict the probability of a launch proceeding on time versus a scrub or delay.</p>
+                    
+                    <h4 class="font-orbitron text-xl font-bold text-white mb-3 mt-6">Core Features:</h4>
+                    <ul class="list-disc list-inside space-y-2 text-indigo-200 text-lg">
+                        <li>Dashboard listing upcoming launches from the SpaceX API.</li>
+                        <li>Real-time weather data processing for the launch site (e.g., wind speed, precipitation, cloud cover).</li>
+                        <li>A machine learning model (e.g., Random Forest or Gradient Boosting) trained on historical launch data (weather, rocket type, payload) vs. outcome (success, scrub, delay).</li>
+                        <li>A final "Go / No-Go" probability score displayed for each upcoming launch.</li>
+                    </ul>
+
+                    <h4 class="font-orbitron text-xl font-bold text-white mb-3 mt-6">Data Feeds:</h4>
+                    <p class="text-indigo-200 text-lg">SpaceX API (for launch schedules), a public Weather API (for site conditions), and a custom-built historical dataset for training.</p>
+                </div>
+            </section>
+
+            <!-- Registration Button -->
+            <section class="my-16 text-center">
+                <a href="/registration.html" class="btn-primary text-white font-bold py-4 px-10 rounded-full text-xl uppercase tracking-wider">
+                    Register for Mission
+                </a>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-8 border-t border-indigo-900/50">
+        <p class="text-indigo-400">&copy; 2025 Stellar Command. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
+
