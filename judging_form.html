@@ -241,91 +241,161 @@
     </div>
 
     <script>
-        // --- Form Interaction & Submission ---
-        const form = document.getElementById('judgingForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const submissionMessage = document.getElementById('submissionMessage');
-        const sliders = [
-            { id: 'scoreInnovation', valueId: 'innovationValue' },
-            { id: 'scoreTechnical', valueId: 'technicalValue' },
-            { id: 'scoreApiUsage', valueId: 'apiUsageValue' },
-            { id: 'scorePresentation', valueId: 'presentationValue' },
-            { id: 'scoreImpact', valueId: 'impactValue' },
-        ];
+        // --- Results Fetching and Display ---
+        const refreshResultsBtn = document.getElementById('refreshResultsBtn');
+        const resultsTableContainer = document.getElementById('resultsTableContainer');
+        const resultsMessage = document.getElementById('resultsMessage');
 
-        // Initialize sliders
-        sliders.forEach(sliderInfo => {
-            const slider = document.getElementById(sliderInfo.id);
-            const valueSpan = document.getElementById(sliderInfo.valueId);
-            if (slider && valueSpan) {
-                valueSpan.textContent = slider.value; // Initial display
-                slider.addEventListener('input', (event) => {
-                    valueSpan.textContent = event.target.value;
-                });
-            }
-        });
+        async function fetchAndDisplayResults() {
+            resultsTableContainer.innerHTML = '<p class="text-center text-gray-500">Loading results...</p>';
+            resultsMessage.className = 'text-center mb-4 hidden'; // Reset message
+            refreshResultsBtn.disabled = true;
 
-        // Form Submission Handler
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-            submissionMessage.textContent = '';
-            submissionMessage.className = 'text-center mb-4 hidden'; // Reset classes
-
-            const formData = new FormData(form);
-            const judgingData = {
-                judgeName: formData.get('judgeName'),
-                teamName: formData.get('teamName'),
-                hackathonTrack: formData.get('hackathonTrack'),
-                scores: {
-                    innovation: parseInt(formData.get('scoreInnovation'), 10),
-                    technical: parseInt(formData.get('scoreTechnical'), 10),
-                    apiUsage: parseInt(formData.get('scoreApiUsage'), 10),
-                    presentation: parseInt(formData.get('scorePresentation'), 10),
-                    impact: parseInt(formData.get('scoreImpact'), 10),
-                },
-                comments: formData.get('comments'),
-                submissionTimestamp: new Date().toISOString()
-            };
-
-            console.log('Judging Data Payload:', JSON.stringify(judgingData, null, 2));
-
-            const backendUrl = 'https://galarc-judge-backend.onrender.com/api/submit-judging';
+            const resultsUrl = 'https://galarc-judge-backend.onrender.com/api/get-results';
 
             try {
-                const response = await fetch(backendUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(judgingData),
-                });
-
+                const response = await fetch(resultsUrl);
+                
+                // --- THIS IS THE NEW LOGIC ---
+                // First, check for the 403 "Not Released" status
+                if (response.status === 403) {
+                    let errorDesc = 'Results have not yet been released.';
+                    try {
+                        // Try to get the specific message from the backend
+                        const errorData = await response.json();
+                        errorDesc = errorData.description || errorDesc;
+                    } catch (e) {
+                        // If backend sends something other than JSON, use the default message
+                    }
+                    // Display the friendly message and stop
+                    resultsTableContainer.innerHTML = `<p class="text-center text-yellow-400">${errorDesc}</p>`;
+                    return; // Stop the function here
+                }
+                // --- END OF NEW LOGIC ---
+                 
+                // If it wasn't a 403, check if it was another error
                 if (!response.ok) {
                     let errorMsg = `HTTP error! status: ${response.status}`;
                     try { const errorData = await response.json(); errorMsg += ` - ${errorData.detail || errorData.message || 'No details.'}`; } catch (e) { /* ignore */ }
                     throw new Error(errorMsg);
                 }
+                
+                // If we are here, the response is 200 OK
+                const resultsData = await response.json();
 
-                const result = await response.json();
-                submissionMessage.textContent = result.message || 'Judgment submitted successfully!';
-                submissionMessage.className = 'text-center mb-4 text-green-400';
-                form.reset();
-                sliders.forEach(s => {
-                    const sliderEl = document.getElementById(s.id);
-                    const valueEl = document.getElementById(s.valueId);
-                    if(sliderEl) sliderEl.value = '5';
-                    if(valueEl) valueEl.textContent = '5';
-                });
+                if (!resultsData || !Array.isArray(resultsData) || resultsData.length === 0) {
+                     resultsTableContainer.innerHTML = '<p class="text-center text-yellow-400">No judging results found yet.</p>';
+                     return; 
+                }
+
+                const processedResults = processJudgingData(resultsData);
+                renderResultsTable(processedResults);
 
             } catch (error) {
-                console.error('Submission failed:', error);
-                submissionMessage.textContent = `Submission failed: ${error.message}.`;
-                submissionMessage.className = 'text-center mb-4 text-red-400';
+                 // This block will now only catch *real* errors (like 500s)
+                 console.error('Failed to fetch results:', error);
+                 resultsMessage.textContent = `Failed to load results: ${error.message}`;
+                 resultsMessage.className = 'text-center mb-4 text-red-400';
+                 resultsTableContainer.innerHTML = '';
             } finally {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Judgment';
+                 refreshResultsBtn.disabled = false;
             }
-        });
+        }
+
+        // --- All the helper functions below are UNCHANGED ---
+
+        function processJudgingData(data) {
+             const teamScores = {};
+             data.forEach(submission => {
+                 if (!submission || typeof submission !== 'object' || !submission.teamName || !submission.scores || typeof submission.scores !== 'object') {
+                     console.warn("Skipping invalid submission data:", submission);
+                     return;
+                 }
+                 const teamName = submission.teamName;
+                 if (!teamScores[teamName]) {
+                     teamScores[teamName] = {
+                         totalScores: { innovation: 0, technical: 0, apiUsage: 0, presentation: 0, impact: 0 },
+                         count: 0,
+                         track: submission.hackathonTrack
+                     };
+                 }
+                 teamScores[teamName].count++;
+                 teamScores[teamName].totalScores.innovation += submission.scores.innovation || 0;
+                 teamScores[teamName].totalScores.technical += submission.scores.technical || 0;
+                 teamScores[teamName].totalScores.apiUsage += submission.scores.apiUsage || 0;
+                 teamScores[teamName].totalScores.presentation += submission.scores.presentation || 0;
+                 teamScores[teamName].totalScores.impact += submission.scores.impact || 0;
+             });
+
+            const aggregatedResults = [];
+            for (const teamName in teamScores) {
+                 const teamData = teamScores[teamName];
+                 if (teamData.count === 0) continue; 
+                 const avgScores = {};
+                 let totalScoreSum = 0;
+                 const criteriaCount = Object.keys(teamData.totalScores).length;
+
+                 for (const criterion in teamData.totalScores) {
+                     const avg = teamData.totalScores[criterion] / teamData.count;
+                     avgScores[criterion] = avg;
+                     totalScoreSum += avg;
+                 }
+                 const overallAvg = criteriaCount > 0 ? totalScoreSum / criteriaCount : 0;
+
+                 aggregatedResults.push({
+                     teamName: teamName,
+                     track: teamData.track,
+                     judgeCount: teamData.count,
+                     avgScores: avgScores,
+                     overallAvg: overallAvg
+                 });
+             }
+             aggregatedResults.sort((a, b) => b.overallAvg - a.overallAvg);
+             return aggregatedResults;
+        }
+
+        function renderResultsTable(processedData) {
+            const trackNames = {
+                'alien_artifacts': 'Alien Artifacts',
+                'celestial_cartographer': 'Celestial Cartographer',
+                'ai_advisor': 'AI Advisor'
+            };
+            let tableHTML = `
+                <table class="min-w-full divide-y divide-gray-700">
+                    <thead class="bg-[#28344e]">
+                        <tr>
+                            <th scope="col" class="rank-col px-6 py-3 text-center text-xs font-medium text-indigo-300 uppercase tracking-wider">Rank</th>
+                            <th scope="col" class="team-col px-6 py-3 text-left text-xs font-medium text-indigo-300 uppercase tracking-wider">Team Name</th>
+                            <th scope="col" class="track-col px-6 py-3 text-left text-xs font-medium text-indigo-300 uppercase tracking-wider">Track</th>
+                            <th scope="col" class="judges-col px-6 py-3 text-center text-xs font-medium text-indigo-300 uppercase tracking-wider">Judges</th>
+                            <th scope="col" class="score-col px-6 py-3 text-right text-xs font-medium text-indigo-300 uppercase tracking-wider">Avg Score</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-700">
+            `;
+             if (processedData.length === 0) {
+                 tableHTML += `<tr><td colspan="5" class="text-center py-4 text-gray-500">No processed results available.</td></tr>`;
+            } else {
+                 processedData.forEach((team, index) => {
+                    tableHTML += `
+                        <tr>
+                            <td class="rank-col px-6 py-4 whitespace-nowrap">${index + 1}</td>
+                            <td class="team-col px-6 py-4 whitespace-nowrap">${team.teamName || 'N/A'}</td>
+                            <td class="track-col px-6 py-4 whitespace-nowrap">${trackNames[team.track] || team.track || 'N/A'}</td>
+                            <td class="judges-col px-6 py-4 whitespace-nowrap">${team.judgeCount || 0}</td>
+                            <td class="score-col px-6 py-4 whitespace-nowrap">${team.overallAvg !== undefined ? team.overallAvg.toFixed(2) : 'N/A'}</td>
+                        </tr>
+                    `;
+                 });
+            }
+            tableHTML += `</tbody></table>`;
+            resultsTableContainer.innerHTML = tableHTML;
+        }
+
+         // --- Initial Setup ---
+         refreshResultsBtn.addEventListener('click', fetchAndDisplayResults);
+         // Fetch results automatically when the page loads
+         window.addEventListener('DOMContentLoaded', fetchAndDisplayResults);
     </script>
 
 </body>
