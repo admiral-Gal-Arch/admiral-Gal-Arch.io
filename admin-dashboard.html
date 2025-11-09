@@ -1,237 +1,218 @@
-from flask import Flask, request, jsonify, abort
-from flask_cors import CORS
-import os
-from pymongo import MongoClient
-from bson.objectid import ObjectId
-import jwt
-import requests
-from datetime import datetime, timedelta, timezone
-from functools import wraps
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Galactic Archives</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .action-button {
+            display: block; /* STYLE FIX: Make all buttons block-level */
+            width: 100%;
+            background-color: #6366f1;
+            transition: background-color 0.2s;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            text-align: center; /* Ensure text is centered */
+            text-decoration: none; /* Remove underline from <a> tags */
+        }
+        .action-button:hover { background-color: #4f46e5; }
+        .action-button:disabled { background-color: #4338ca; opacity: 0.6; cursor: not-allowed; }
+        .danger-button { background-color: #dc2626; }
+        .danger-button:hover { background-color: #b91c1c; }
+        .safe-button { background-color: #16a34a; }
+        .safe-button:hover { background-color: #15803d; }
+        .form-input { background-color: #1e293b; border-color: #334155; color: #e2e8f0; border-radius: 0.375rem; border-width: 1px; }
+        .form-input:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 2px #4f46e5; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-app = Flask(__name__)
-CORS(app)
+    <div class="max-w-md w-full">
+        <div id="loginContainer" class="bg-[#1e293b] p-8 rounded-lg shadow-xl border border-gray-700">
+            <header class="text-center mb-6">
+                <h1 class="text-2xl font-extrabold text-[#818cf8]">Admin Login</h1>
+            </header>
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium mb-1 text-gray-400">Password</label>
+                    <input type="password" id="password" required class="w-full p-2 form-input">
+                </div>
+                <div id="loginError" class="text-center mb-4 text-red-400 h-4"></div>
+                <div class="text-center">
+                    <button type="submit" id="loginBtn" class="action-button w-full">Authenticate</button>
+                </div>
+            </form>
+        </div>
 
-# --- 1. Config & MongoDB Setup ---
-MONGODB_URI = os.environ.get('MONGODB_URI')
-SECRET_KEY = os.environ.get('SECRET_KEY')
-ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
-AGGREGATOR_URL = os.environ.get('AGGREGATOR_URL')
+        <div id="dashboardContainer" class="hidden bg-[#1e293b] p-8 rounded-lg shadow-xl border border-gray-700">
+            <header class="text-center mb-6">
+                <h1 class="text-2xl font-extrabold text-[#818cf8]">Admin Dashboard</h1>
+            </header>
+            <div id="dashboardMessage" class="text-center mb-4 text-green-400 h-4"></div>
+            <div class="space-y-4">
+                <button id="releaseBtn" class="action-button">Loading Status...</button>
+                
+                <button id="refreshBtn" class="action-button" style="background-color: #0d9488;">Refresh Aggregator Cache</button>
+                
+                <button id="clearBtn" class="action-button danger-button">Clear All Judge Submissions</button>
+                
+                <a href="results_page.html" class="action-button" target="_blank">View Public Results Page</a>
+                
+                <button id="logoutBtn" class="action-button" style="background-color: #52525b;">Log Out</button>
+            </div>
+        </div>
+    </div>
 
-# Check for essential environment variables
-if not MONGODB_URI or not SECRET_KEY or not ADMIN_PASSWORD:
-    raise RuntimeError("Missing one or more environment variables: MONGODB_URI, SECRET_KEY, ADMIN_PASSWORD")
-# AGGREGATOR_URL is optional, so we don't raise an error
-
-try:
-    client = MongoClient(MONGODB_URI)
-    db = client.get_database("hackathonDB")
-    submissions_collection = db.get_collection("submissions")
-    app_state_collection = db.get_collection("app_state")
-    client.server_info() # Test connection
-    print("Successfully connected to MongoDB.")
-except Exception as e:
-    print(f"ERROR: Could not connect to MongoDB: {e}")
-    client = None
-    submissions_collection = None
-    app_state_collection = None
-# --- End of Setup ---
-
-
-# --- 2. Token Authentication Wrapper ---
-def token_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = None
-        if 'Authorization' in request.headers:
-            auth_header = request.headers['Authorization']
-            try:
-                token = auth_header.split(" ")[1]
-            except IndexError:
-                return jsonify({"message": "Malformed 'Authorization' header."}), 401
+    <script>
+        // --- Define All Elements ---
+        const loginContainer = document.getElementById('loginContainer');
+        const dashboardContainer = document.getElementById('dashboardContainer');
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const releaseBtn = document.getElementById('releaseBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const dashboardMessage = document.getElementById('dashboardMessage');
+        const refreshBtn = document.getElementById('refreshBtn'); // <-- NEW
         
-        if not token:
-            return jsonify({"message": "Token is missing!"}), 401
+        // --- IMPORTANT: Set this to your backend URL ---
+        const baseUrl = 'https://galarc-judge-backend.onrender.com';
+
+        // --- Core Functions ---
         
-        try:
-            # Decode the token using the SECRET_KEY
-            jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            return jsonify({"message": "Token has expired!"}), 401
-        except jwt.InvalidTokenError:
-            return jsonify({"message": "Token is invalid!"}), 401
-        
-        return f(*args, **kwargs)
-    return decorated
-# --- End of Token Wrapper ---
+        async function apiRequest(endpoint, method = 'POST', showMessage = true) {
+            const token = localStorage.getItem('adminAuthToken');
+            if (!token) {
+                showLogin();
+                return;
+            }
+            
+            // Clear message on new action
+            dashboardMessage.textContent = '';
+            
+            try {
+                const response = await fetch(`${baseUrl}${endpoint}`, {
+                    method: method,
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.message || result.description || 'An error occurred.');
+                }
+                
+                if (showMessage) {
+                    dashboardMessage.textContent = result.message;
+                    dashboardMessage.className = 'text-center mb-4 text-green-400 h-4';
+                }
+                return result;
 
+            } catch (error) {
+                dashboardMessage.textContent = error.message;
+                dashboardMessage.className = 'text-center mb-4 text-red-400 h-4';
+                if (error.message.includes('Token')) {
+                    showLogin();
+                }
+            }
+        }
 
-# --- 3. API Endpoints ---
+        async function checkStatus() {
+            const status = await apiRequest('/api/results-status', 'GET', false);
+            if (status && status.results_released) {
+                releaseBtn.textContent = 'Retract Results (Make Private)';
+                releaseBtn.classList.add('danger-button');
+                releaseBtn.classList.remove('safe-button');
+            } else {
+                releaseBtn.textContent = 'Release Results (Make Public)';
+                releaseBtn.classList.add('safe-button');
+                releaseBtn.classList.remove('danger-button');
+            }
+        }
 
-@app.route('/api/admin-login', methods=['POST'])
-def admin_login():
-    """Receives admin password and returns a JWT."""
-    if not request.is_json:
-        abort(400, description="Request must be JSON")
-    
-    data = request.get_json()
-    password = data.get('password')
+        function showDashboard() {
+            loginContainer.classList.add('hidden');
+            dashboardContainer.classList.remove('hidden');
+            dashboardMessage.textContent = '';
+            checkStatus();
+        }
 
-    if not password:
-        abort(400, description="Password is required.")
+        function showLogin() {
+            localStorage.removeItem('adminAuthToken');
+            loginContainer.classList.remove('hidden');
+            dashboardContainer.classList.add('hidden');
+            loginError.textContent = '';
+        }
 
-    # Check the password against the environment variable
-    if password == ADMIN_PASSWORD:
-        # Password is correct, create a token
-        token = jwt.encode({
-            'admin': True,
-            'exp': datetime.now(timezone.utc) + timedelta(hours=8) # Token expires in 8 hours
-        }, SECRET_KEY, algorithm="HS256")
-        
-        return jsonify({"status": "success", "message": "Login successful.", "token": token}), 200
-    else:
-        # Invalid credentials
-        return jsonify({"message": "Invalid credentials."}), 401
+        // --- Event Listeners ---
 
-@app.route('/api/submit-judging', methods=['POST'])
-def submit_judging():
-    """(PUBLIC) Receives judging data and inserts it into MongoDB."""
-    if not request.is_json:
-        abort(400, description="Request must be JSON")
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Verifying...';
+            loginError.textContent = '';
+            
+            try {
+                const response = await fetch(`${baseUrl}/api/admin-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password.value })
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.message || 'Login failed.');
+                }
+                
+                localStorage.setItem('adminAuthToken', result.token);
+                showDashboard();
 
-    # Check if DB connection failed on startup
-    if submissions_collection is None:
-         abort(500, description="Database connection is not available.")
+            } catch (error) {
+                loginError.textContent = error.message;
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Authenticate';
+            }
+        });
 
-    new_submission = request.get_json()
+        logoutBtn.addEventListener('click', showLogin);
 
-    # Full validation based on your original file
-    required_fields = ['judgeName', 'teamName', 'hackathonTrack', 'scores', 'submissionTimestamp']
-    if not all(field in new_submission for field in required_fields):
-        abort(400, description="Missing required fields in submission")
+        releaseBtn.addEventListener('click', async () => {
+            releaseBtn.disabled = true;
+            const isReleased = releaseBtn.textContent.includes('Retract');
+            const endpoint = isReleased ? '/api/retract-results' : '/api/release-results';
+            
+            await apiRequest(endpoint);
+            await checkStatus(); // Refresh the button state
+            releaseBtn.disabled = false;
+        });
 
-    if not isinstance(new_submission.get('scores'), dict):
-         abort(400, description="Scores field must be an object")
+        clearBtn.addEventListener('click', () => {
+            if (confirm('ARE YOU SURE?\nThis will delete ALL judge submissions permanently.')) {
+                apiRequest('/api/clear-results');
+            }
+        });
 
-    try:
-        # Insert the new document
-        result = submissions_collection.insert_one(new_submission)
-        # This print will show up in your Render logs - use it to confirm successful inserts
-        print(f"Inserted new submission with id: {result.inserted_id}") 
-        return jsonify({"status": "success", "message": "Judgment submitted successfully!", "id": str(result.inserted_id)}), 201
-    except Exception as e:
-        print(f"Unexpected error during submission: {e}")
-        abort(500, description="An internal server error occurred.")
+        // --- NEW Event Listener ---
+        refreshBtn.addEventListener('click', () => {
+            if (confirm('Trigger a refresh of the aggregator cache?\n(This may take a moment)')) {
+                apiRequest('/api/refresh-aggregator');
+            }
+        });
 
-@app.route('/api/get-results', methods=['GET'])
-def get_results():
-    """(PUBLIC) Returns results ONLY IF they have been released."""
-    if submissions_collection is None or app_state_collection is None:
-         abort(500, description="Database connection is not available.")
-
-    # 1. Check the release status from the database
-    status_doc = app_state_collection.find_one({"_id": "release_config"})
-    
-    # 2. If doc doesn't exist OR results_released is False, block the request
-    if not status_doc or not status_doc.get("results_released", False):
-        abort(403, description="Results have not been released by the admin yet.")
-
-    # 3. If released, proceed to get results
-    try:
-        all_results_cursor = submissions_collection.find()
-        results_list = list(all_results_cursor)
-
-        # Convert MongoDB's _id to a string for JSON
-        for result in results_list:
-            result['_id'] = str(result['_id'])
-
-        return jsonify(results_list), 200
-    except Exception as e:
-        print(f"Unexpected error retrieving results: {e}")
-        abort(500, description="An internal server error occurred retrieving results.")
-
-@app.route('/api/results-status', methods=['GET'])
-@token_required
-def get_results_status():
-    """(ADMIN) Checks if results are currently released."""
-    if app_state_collection is None:
-        abort(500, description="Database connection is not available.")
-        
-    status_doc = app_state_collection.find_one({"_id": "release_config"})
-    is_released = status_doc.get("results_released", False) if status_doc else False
-    return jsonify({"status": "success", "results_released": is_released}), 200
-
-@app.route('/api/release-results', methods=['POST'])
-@token_required
-def release_results():
-    """(ADMIN) Sets the results_released flag to True."""
-    if app_state_collection is None:
-        abort(500, description="Database connection is not available.")
-        
-    try:
-        # upsert=True creates the document if it doesn't exist
-        app_state_collection.update_one(
-            {"_id": "release_config"},
-            {"$set": {"results_released": True}},
-            upsert=True
-        )
-        return jsonify({"status": "success", "message": "Results have been publicly released."}), 200
-    except Exception as e:
-        abort(500, description=f"Could not release results: {str(e)}")
-
-@app.route('/api/retract-results', methods=['POST'])
-@token_required
-def retract_results():
-    """(ADMIN) Sets the results_released flag to False."""
-    if app_state_collection is None:
-        abort(500, description="Database connection is not available.")
-        
-    try:
-        app_state_collection.update_one(
-            {"_id": "release_config"},
-            {"$set": {"results_released": False}},
-            upsert=True
-        )
-        return jsonify({"status": "success", "message": "Results have been retracted and are now private."}), 200
-    except Exception as e:
-        abort(500, description=f"Could not retract results: {str(e)}")
-
-@app.route('/api/refresh-aggregator', methods=['POST'])
-@token_required
-def refresh_aggregator():
-    """(ADMIN) Calls the aggregator backend to refresh its data."""
-    if not AGGREGATOR_URL:
-        abort(500, description="AGGREGATOR_URL is not set in the environment.")
-    
-    try:
-        # This assumes your aggregator backend has an endpoint at /api/refresh-data
-        # Change this path if yours is different
-        aggregator_endpoint = f"{AGGREGATOR_URL}/api/refresh-data"
-        
-        response = requests.post(aggregator_endpoint, timeout=10)
-        response.raise_for_status() # Raise an exception for bad statuses
-        
-        return jsonify({"status": "success", "message": "Aggregator refresh triggered successfully."}), 200
-    except requests.exceptions.RequestException as e:
-        print(f"Error calling aggregator: {e}")
-        abort(500, description=f"Could not trigger aggregator refresh: {str(e)}")
-
-@app.route('/api/clear-results', methods=['POST'])
-@token_required
-def clear_results():
-    """(ADMIN) Clears all results from the submissions collection."""
-    if submissions_collection is None:
-         abort(500, description="Database connection is not available.")
-         
-    try:
-        # Deletes all documents from the collection
-        delete_result = submissions_collection.delete_many({})
-        return jsonify({"status": "success", "message": f"Results cleared. {delete_result.deleted_count} submissions deleted."}), 200
-    except Exception as e:
-        print(f"Error clearing results: {e}")
-        abort(500, description=f"Could not clear results: {str(e)}")
-
-# --- 4. Run the App ---
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    # Host must be 0.0.0.0 to be accessible on Render
-    app.run(host='0.0.0.0', port=port, debug=True) # Turn debug=False for production
+        // --- Initial Page Load ---
+        if (localStorage.getItem('adminAuthToken')) {
+            showDashboard();
+        } else {
+            showLogin();
+        }
+    </script>
+</body>
+</html>
