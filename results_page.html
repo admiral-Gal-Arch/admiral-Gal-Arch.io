@@ -115,170 +115,193 @@
         </div>
     </div>
 
-   <script>
-        // --- Results Fetching and Display ---
-        const refreshResultsBtn = document.getElementById('refreshResultsBtn');
-        const resultsTableContainer = document.getElementById('resultsTableContainer');
-        const resultsMessage = document.getElementById('resultsMessage');
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>Admin Dashboard - Galactic Archives</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .action-button { background-color: #6366f1; transition: background-color 0.2s; color: white; font-weight: bold; padding: 0.75rem 2rem; border-radius: 0.5rem; cursor: pointer; }
+        .action-button:hover { background-color: #4f46e5; }
+        .action-button:disabled { background-color: #4338ca; opacity: 0.6; cursor: not-allowed; }
+        .danger-button { background-color: #dc2626; }
+        .danger-button:hover { background-color: #b91c1c; }
+        .safe-button { background-color: #16a34a; }
+        .safe-button:hover { background-color: #15803d; }
+        .form-input { background-color: #1e293b; border-color: #334155; color: #e2e8f0; border-radius: 0.375rem; border-width: 1px; }
+        .form-input:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 2px #4f46e5; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="max-w-md w-full">
+        <div id="loginContainer" class="bg-[#1e293b] p-8 rounded-lg shadow-xl border border-gray-700">
+            <header class="text-center mb-6">
+                <h1 class="text-2xl font-extrabold text-[#818cf8]">Admin Login</h1>
+            </header>
+            <form id="loginForm">
+                <div class="mb-4">
+                    <label for="password" class="block text-sm font-medium mb-1 text-gray-400">Password</label>
+                    <input type="password" id="password" required class="w-full p-2 form-input">
+                </div>
+                <div id="loginError" class="text-center mb-4 text-red-400 h-4"></div>
+                <div class="text-center">
+                    <button type="submit" id="loginBtn" class="action-button w-full">Authenticate</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="dashboardContainer" class="hidden bg-[#1e293b] p-8 rounded-lg shadow-xl border border-gray-700">
+            <header class="text-center mb-6">
+                <h1 class="text-2xl font-extrabold text-[#818cf8]">Admin Dashboard</h1>
+            </header>
+            <div id="dashboardMessage" class="text-center mb-4 text-green-400 h-4"></div>
+            <div class="space-y-4">
+                <button id="releaseBtn" class="action-button w-full">Loading Status...</button>
+                <button id="clearBtn" class="action-button danger-button w-full">Clear All Judge Submissions</button>
+                <a href="results_page.html" class="action-button link-button w-full text-center" target="_blank">View Public Results Page</a>
+                <button id="logoutBtn" class="action-button w-full" style="background-color: #52525b;">Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const loginContainer = document.getElementById('loginContainer');
+        const dashboardContainer = document.getElementById('dashboardContainer');
+        const loginForm = document.getElementById('loginForm');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+        const releaseBtn = document.getElementById('releaseBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const dashboardMessage = document.getElementById('dashboardMessage');
+
+        const baseUrl = 'https://galarc-judge-backend.onrender.com';
+
+        // --- Core Functions ---
         
-        const adminLoginPage = 'admin-login.html'; // The login page you just created
-        const resultsUrl = 'https://galarc-judge-backend.onrender.com/api/get-results';
-
-        function handleAuthError(message) {
-            console.error('Auth Error:', message);
-            // Clear the bad token and boot the user to the login page
-            localStorage.removeItem('adminAuthToken');
-            window.location.href = adminLoginPage;
-        }
-
-        async function fetchAndDisplayResults() {
-            resultsTableContainer.innerHTML = '<p class="text-center text-gray-500">Loading results...</p>';
-            resultsMessage.className = 'text-center mb-4 hidden';
-            refreshResultsBtn.disabled = true;
-
-            // 1. Get the token from storage
+        async function apiRequest(endpoint, method = 'POST', showMessage = true) {
             const token = localStorage.getItem('adminAuthToken');
-
             if (!token) {
-                handleAuthError('No token found. Redirecting to login.');
+                showLogin();
                 return;
             }
-
+            
             try {
-                // 2. Send the token in the Authorization header
-                const response = await fetch(resultsUrl, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
+                const response = await fetch(`${baseUrl}${endpoint}`, {
+                    method: method,
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
-
-                if (response.status === 401 || response.status === 403) {
-                    // Token is bad (expired or invalid)
-                    const errorData = await response.json();
-                    handleAuthError(errorData.message || 'Token is invalid or expired.');
-                    return;
-                }
-
-                 if (!response.ok) {
-                    let errorMsg = `HTTP error! status: ${response.status}`;
-                    try { const errorData = await response.json(); errorMsg += ` - ${errorData.detail || errorData.message || 'No details.'}`; } catch (e) { /* ignore */ }
-                    throw new Error(errorMsg);
+                
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.message || 'An error occurred.');
                 }
                 
-                const resultsData = await response.json();
-
-                if (!resultsData || !Array.isArray(resultsData) || resultsData.length === 0) {
-                     resultsTableContainer.innerHTML = '<p class="text-center text-yellow-400">No judging results found yet.</p>';
-                     return;
+                if (showMessage) {
+                    dashboardMessage.textContent = result.message;
                 }
-
-                const processedResults = processJudgingData(resultsData);
-                renderResultsTable(processedResults);
+                return result;
 
             } catch (error) {
-                 console.error('Failed to fetch results:', error);
-                 resultsMessage.textContent = `Failed to load results: ${error.message}`;
-                 resultsMessage.className = 'text-center mb-4 text-red-400';
-                 resultsTableContainer.innerHTML = '';
-            } finally {
-                 refreshResultsBtn.disabled = false;
+                dashboardMessage.textContent = error.message;
+                dashboardMessage.className = 'text-center mb-4 text-red-400 h-4';
+                if (error.message.includes('Token')) {
+                    showLogin();
+                }
             }
         }
 
-        function processJudgingData(data) {
-             const teamScores = {};
-             data.forEach(submission => {
-                 if (!submission || typeof submission !== 'object' || !submission.teamName || !submission.scores || typeof submission.scores !== 'object') {
-                     console.warn("Skipping invalid submission data:", submission);
-                     return;
-                 }
-                 const teamName = submission.teamName;
-                 if (!teamScores[teamName]) {
-                     teamScores[teamName] = {
-                         totalScores: { innovation: 0, technical: 0, apiUsage: 0, presentation: 0, impact: 0 },
-                         count: 0,
-                         track: submission.hackathonTrack
-                     };
-                 }
-                 teamScores[teamName].count++;
-                 teamScores[teamName].totalScores.innovation += submission.scores.innovation || 0;
-                 teamScores[teamName].totalScores.technical += submission.scores.technical || 0;
-                 teamScores[teamName].totalScores.apiUsage += submission.scores.apiUsage || 0;
-                 teamScores[teamName].totalScores.presentation += submission.scores.presentation || 0;
-                 teamScores[teamName].totalScores.impact += submission.scores.impact || 0;
-             });
-
-            const aggregatedResults = [];
-            for (const teamName in teamScores) {
-                 const teamData = teamScores[teamName];
-                 if (teamData.count === 0) continue; 
-                 const avgScores = {};
-                 let totalScoreSum = 0;
-                 const criteriaCount = Object.keys(teamData.totalScores).length;
-
-                 for (const criterion in teamData.totalScores) {
-                     const avg = teamData.totalScores[criterion] / teamData.count;
-                     avgScores[criterion] = avg;
-                     totalScoreSum += avg;
-                 }
-                 const overallAvg = criteriaCount > 0 ? totalScoreSum / criteriaCount : 0;
-
-                 aggregatedResults.push({
-                     teamName: teamName,
-                     track: teamData.track,
-                     judgeCount: teamData.count,
-                     avgScores: avgScores,
-                     overallAvg: overallAvg
-                 });
-             }
-             aggregatedResults.sort((a, b) => b.overallAvg - a.overallAvg);
-             return aggregatedResults;
-        }
-
-        function renderResultsTable(processedData) {
-            const trackNames = {
-                'alien_artifacts': 'Alien Artifacts',
-                'celestial_cartographer': 'Celestial Cartographer',
-                'ai_advisor': 'AI Advisor'
-            };
-            let tableHTML = `
-                <table class="min-w-full divide-y divide-gray-700">
-                    <thead class="bg-[#28344e]">
-                        <tr>
-                            <th scope="col" class="rank-col px-6 py-3 text-center text-xs font-medium text-indigo-300 uppercase tracking-wider">Rank</th>
-                            <th scope="col" class="team-col px-6 py-3 text-left text-xs font-medium text-indigo-300 uppercase tracking-wider">Team Name</th>
-                            <th scope="col" class="track-col px-6 py-3 text-left text-xs font-medium text-indigo-300 uppercase tracking-wider">Track</th>
-                            <th scope="col" class="judges-col px-6 py-3 text-center text-xs font-medium text-indigo-300 uppercase tracking-wider">Judges</th>
-                            <th scope="col" class="score-col px-6 py-3 text-right text-xs font-medium text-indigo-300 uppercase tracking-wider">Avg Score</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-700">
-            `;
-             if (processedData.length === 0) {
-                 tableHTML += `<tr><td colspan="5" class="text-center py-4 text-gray-500">No processed results available.</td></tr>`;
+        async function checkStatus() {
+            const status = await apiRequest('/api/results-status', 'GET', false);
+            if (status && status.results_released) {
+                releaseBtn.textContent = 'Retract Results (Make Private)';
+                releaseBtn.classList.add('danger-button');
+                releaseBtn.classList.remove('safe-button');
             } else {
-                 processedData.forEach((team, index) => {
-                    tableHTML += `
-                        <tr>
-                            <td class="rank-col px-6 py-4 whitespace-nowrap">${index + 1}</td>
-                            <td class="team-col px-6 py-4 whitespace-nowrap">${team.teamName || 'N/A'}</td>
-                            <td class="track-col px-6 py-4 whitespace-nowrap">${trackNames[team.track] || team.track || 'N/A'}</td>
-                            <td class="judges-col px-6 py-4 whitespace-nowrap">${team.judgeCount || 0}</td>
-                            <td class="score-col px-6 py-4 whitespace-nowrap">${team.overallAvg !== undefined ? team.overallAvg.toFixed(2) : 'N/A'}</td>
-                        </tr>
-                    `;
-                 });
+                releaseBtn.textContent = 'Release Results (Make Public)';
+                releaseBtn.classList.add('safe-button');
+                releaseBtn.classList.remove('danger-button');
             }
-            tableHTML += `</tbody></table>`;
-            resultsTableContainer.innerHTML = tableHTML;
         }
 
-         // --- Initial Setup ---
-         refreshResultsBtn.addEventListener('click', fetchAndDisplayResults);
-         // Fetch results automatically when the page loads
-         window.addEventListener('DOMContentLoaded', fetchAndDisplayResults);
+        function showDashboard() {
+            loginContainer.classList.add('hidden');
+            dashboardContainer.classList.remove('hidden');
+            dashboardMessage.textContent = '';
+            checkStatus();
+        }
+
+        function showLogin() {
+            localStorage.removeItem('adminAuthToken');
+            loginContainer.classList.remove('hidden');
+            dashboardContainer.classList.add('hidden');
+            loginError.textContent = '';
+        }
+
+        // --- Event Listeners ---
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Verifying...';
+            loginError.textContent = '';
+            
+            try {
+                const response = await fetch(`${baseUrl}/api/admin-login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: password.value })
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    throw new Error(result.message || 'Login failed.');
+                }
+                
+                localStorage.setItem('adminAuthToken', result.token);
+                showDashboard();
+
+            } catch (error) {
+                loginError.textContent = error.message;
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Authenticate';
+            }
+        });
+
+        logoutBtn.addEventListener('click', showLogin);
+
+        releaseBtn.addEventListener('click', async () => {
+            releaseBtn.disabled = true;
+            const isReleased = releaseBtn.textContent.includes('Retract');
+            const endpoint = isReleased ? '/api/retract-results' : '/api/release-results';
+            
+            await apiRequest(endpoint);
+            await checkStatus(); // Refresh the button state
+            releaseBtn.disabled = false;
+        });
+
+        clearBtn.addEventListener('click', () => {
+            if (confirm('ARE YOU SURE?\nThis will delete ALL judge submissions permanently.')) {
+                apiRequest('/api/clear-results');
+            }
+        });
+
+        // --- Initial Page Load ---
+        if (localStorage.getItem('adminAuthToken')) {
+            showDashboard();
+        } else {
+            showLogin();
+        }
     </script>
+</body>
+</html>
 
 </body>
 </html>
