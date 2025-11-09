@@ -115,32 +115,62 @@
         </div>
     </div>
 
-    <script>
+   <script>
         // --- Results Fetching and Display ---
         const refreshResultsBtn = document.getElementById('refreshResultsBtn');
         const resultsTableContainer = document.getElementById('resultsTableContainer');
         const resultsMessage = document.getElementById('resultsMessage');
+        
+        const adminLoginPage = 'admin-login.html'; // The login page you just created
+        const resultsUrl = 'https://galarc-judge-backend.onrender.com/api/get-results';
+
+        function handleAuthError(message) {
+            console.error('Auth Error:', message);
+            // Clear the bad token and boot the user to the login page
+            localStorage.removeItem('adminAuthToken');
+            window.location.href = adminLoginPage;
+        }
 
         async function fetchAndDisplayResults() {
             resultsTableContainer.innerHTML = '<p class="text-center text-gray-500">Loading results...</p>';
-            resultsMessage.className = 'text-center mb-4 hidden'; // Reset message
+            resultsMessage.className = 'text-center mb-4 hidden';
             refreshResultsBtn.disabled = true;
 
-            // --- Use the correct results endpoint URL ---
-            const resultsUrl = 'https://galarc-judge-backend.onrender.com/api/get-results';
+            // 1. Get the token from storage
+            const token = localStorage.getItem('adminAuthToken');
+
+            if (!token) {
+                handleAuthError('No token found. Redirecting to login.');
+                return;
+            }
 
             try {
-                const response = await fetch(resultsUrl);
+                // 2. Send the token in the Authorization header
+                const response = await fetch(resultsUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.status === 401 || response.status === 403) {
+                    // Token is bad (expired or invalid)
+                    const errorData = await response.json();
+                    handleAuthError(errorData.message || 'Token is invalid or expired.');
+                    return;
+                }
+
                  if (!response.ok) {
                     let errorMsg = `HTTP error! status: ${response.status}`;
                     try { const errorData = await response.json(); errorMsg += ` - ${errorData.detail || errorData.message || 'No details.'}`; } catch (e) { /* ignore */ }
                     throw new Error(errorMsg);
                 }
+                
                 const resultsData = await response.json();
 
                 if (!resultsData || !Array.isArray(resultsData) || resultsData.length === 0) {
                      resultsTableContainer.innerHTML = '<p class="text-center text-yellow-400">No judging results found yet.</p>';
-                     return; // Exit if no data
+                     return;
                 }
 
                 const processedResults = processJudgingData(resultsData);
@@ -150,17 +180,15 @@
                  console.error('Failed to fetch results:', error);
                  resultsMessage.textContent = `Failed to load results: ${error.message}`;
                  resultsMessage.className = 'text-center mb-4 text-red-400';
-                 resultsTableContainer.innerHTML = ''; // Clear loading message on error
+                 resultsTableContainer.innerHTML = '';
             } finally {
                  refreshResultsBtn.disabled = false;
             }
         }
 
         function processJudgingData(data) {
-             const teamScores = {}; // { teamName: { totalScores: {}, count: 0, track: '' } }
-
+             const teamScores = {};
              data.forEach(submission => {
-                 // Skip submissions that might be incomplete or malformed
                  if (!submission || typeof submission !== 'object' || !submission.teamName || !submission.scores || typeof submission.scores !== 'object') {
                      console.warn("Skipping invalid submission data:", submission);
                      return;
@@ -170,11 +198,10 @@
                      teamScores[teamName] = {
                          totalScores: { innovation: 0, technical: 0, apiUsage: 0, presentation: 0, impact: 0 },
                          count: 0,
-                         track: submission.hackathonTrack // Assume track is consistent per team
+                         track: submission.hackathonTrack
                      };
                  }
                  teamScores[teamName].count++;
-                 // Safely add scores, default to 0 if a criterion is missing in a submission
                  teamScores[teamName].totalScores.innovation += submission.scores.innovation || 0;
                  teamScores[teamName].totalScores.technical += submission.scores.technical || 0;
                  teamScores[teamName].totalScores.apiUsage += submission.scores.apiUsage || 0;
@@ -182,12 +209,10 @@
                  teamScores[teamName].totalScores.impact += submission.scores.impact || 0;
              });
 
-            // Calculate averages
             const aggregatedResults = [];
             for (const teamName in teamScores) {
                  const teamData = teamScores[teamName];
-                 if (teamData.count === 0) continue; // Skip teams with no valid scores
-
+                 if (teamData.count === 0) continue; 
                  const avgScores = {};
                  let totalScoreSum = 0;
                  const criteriaCount = Object.keys(teamData.totalScores).length;
@@ -197,9 +222,7 @@
                      avgScores[criterion] = avg;
                      totalScoreSum += avg;
                  }
-                  // Avoid division by zero if criteriaCount is somehow 0
                  const overallAvg = criteriaCount > 0 ? totalScoreSum / criteriaCount : 0;
-
 
                  aggregatedResults.push({
                      teamName: teamName,
@@ -209,21 +232,16 @@
                      overallAvg: overallAvg
                  });
              }
-
-             // Sort by overall average score descending
              aggregatedResults.sort((a, b) => b.overallAvg - a.overallAvg);
-
              return aggregatedResults;
         }
 
         function renderResultsTable(processedData) {
-            // Map track keys to readable names
             const trackNames = {
                 'alien_artifacts': 'Alien Artifacts',
                 'celestial_cartographer': 'Celestial Cartographer',
                 'ai_advisor': 'AI Advisor'
             };
-
             let tableHTML = `
                 <table class="min-w-full divide-y divide-gray-700">
                     <thead class="bg-[#28344e]">
@@ -233,12 +251,10 @@
                             <th scope="col" class="track-col px-6 py-3 text-left text-xs font-medium text-indigo-300 uppercase tracking-wider">Track</th>
                             <th scope="col" class="judges-col px-6 py-3 text-center text-xs font-medium text-indigo-300 uppercase tracking-wider">Judges</th>
                             <th scope="col" class="score-col px-6 py-3 text-right text-xs font-medium text-indigo-300 uppercase tracking-wider">Avg Score</th>
-                            <!-- Add individual criteria headers if needed -->
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-700">
             `;
-
              if (processedData.length === 0) {
                  tableHTML += `<tr><td colspan="5" class="text-center py-4 text-gray-500">No processed results available.</td></tr>`;
             } else {
@@ -250,18 +266,11 @@
                             <td class="track-col px-6 py-4 whitespace-nowrap">${trackNames[team.track] || team.track || 'N/A'}</td>
                             <td class="judges-col px-6 py-4 whitespace-nowrap">${team.judgeCount || 0}</td>
                             <td class="score-col px-6 py-4 whitespace-nowrap">${team.overallAvg !== undefined ? team.overallAvg.toFixed(2) : 'N/A'}</td>
-                            <!-- Optionally add columns for avgScores.innovation.toFixed(2), etc. -->
                         </tr>
                     `;
                  });
             }
-
-
-            tableHTML += `
-                    </tbody>
-                </table>
-            `;
-
+            tableHTML += `</tbody></table>`;
             resultsTableContainer.innerHTML = tableHTML;
         }
 
@@ -269,7 +278,6 @@
          refreshResultsBtn.addEventListener('click', fetchAndDisplayResults);
          // Fetch results automatically when the page loads
          window.addEventListener('DOMContentLoaded', fetchAndDisplayResults);
-
     </script>
 
 </body>
