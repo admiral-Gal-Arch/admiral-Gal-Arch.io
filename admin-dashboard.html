@@ -2,13 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard - Galactic Archives</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #e2e8f0; }
-        .action-button { background-color: #6366f1; transition: background-color 0.2s; color: white; font-weight: bold; padding: 0.75rem 2rem; border-radius: 0.5rem; cursor: pointer; }
+        .action-button {
+            display: block; /* <-- STYLE FIX: Make all buttons block-level */
+            width: 100%;
+            background-color: #6366f1;
+            transition: background-color 0.2s;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            text-align: center; /* Ensure text is centered */
+        }
         .action-button:hover { background-color: #4f46e5; }
         .action-button:disabled { background-color: #4338ca; opacity: 0.6; cursor: not-allowed; }
         .danger-button { background-color: #dc2626; }
@@ -45,15 +56,21 @@
             </header>
             <div id="dashboardMessage" class="text-center mb-4 text-green-400 h-4"></div>
             <div class="space-y-4">
-                <button id="releaseBtn" class="action-button w-full">Loading Status...</button>
-                <button id="clearBtn" class="action-button danger-button w-full">Clear All Judge Submissions</button>
-                <a href="results_page.html" class="action-button link-button w-full text-center" target="_blank">View Public Results Page</a>
-                <button id="logoutBtn" class="action-button w-full" style="background-color: #52525b;">Log Out</button>
+                <button id="releaseBtn" class="action-button">Loading Status...</button>
+                
+                <button id="refreshBtn" class="action-button" style="background-color: #0d9488;">Refresh Aggregator Cache</button>
+                
+                <button id="clearBtn" class="action-button danger-button">Clear All Judge Submissions</button>
+                
+                <a href="results_page.html" class="action-button" target="_blank">View Public Results Page</a>
+                
+                <button id="logoutBtn" class="action-button" style="background-color: #52525b;">Log Out</button>
             </div>
         </div>
     </div>
 
     <script>
+        // --- Define All Elements ---
         const loginContainer = document.getElementById('loginContainer');
         const dashboardContainer = document.getElementById('dashboardContainer');
         const loginForm = document.getElementById('loginForm');
@@ -63,7 +80,8 @@
         const clearBtn = document.getElementById('clearBtn');
         const logoutBtn = document.getElementById('logoutBtn');
         const dashboardMessage = document.getElementById('dashboardMessage');
-
+        const refreshBtn = document.getElementById('refreshBtn'); // <-- NEW
+        
         const baseUrl = 'https://galarc-judge-backend.onrender.com';
 
         // --- Core Functions ---
@@ -75,6 +93,9 @@
                 return;
             }
             
+            // Clear message on new action
+            dashboardMessage.textContent = '';
+            
             try {
                 const response = await fetch(`${baseUrl}${endpoint}`, {
                     method: method,
@@ -84,11 +105,12 @@
                 const result = await response.json();
                 
                 if (!response.ok) {
-                    throw new Error(result.message || 'An error occurred.');
+                    throw new Error(result.message || result.description || 'An error occurred.');
                 }
                 
                 if (showMessage) {
                     dashboardMessage.textContent = result.message;
+                    dashboardMessage.className = 'text-center mb-4 text-green-400 h-4';
                 }
                 return result;
 
@@ -173,6 +195,13 @@
         clearBtn.addEventListener('click', () => {
             if (confirm('ARE YOU SURE?\nThis will delete ALL judge submissions permanently.')) {
                 apiRequest('/api/clear-results');
+            }
+        });
+
+        // --- NEW Event Listener ---
+        refreshBtn.addEventListener('click', () => {
+            if (confirm('Trigger a refresh of the aggregator cache?\n(This may take a moment)')) {
+                apiRequest('/api/refresh-aggregator');
             }
         });
 
