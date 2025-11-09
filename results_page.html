@@ -86,7 +86,7 @@
 
     <div class="max-w-4xl mx-auto">
 
-         <div id="resultsSection">
+        <div id="resultsSection">
              <div class="bg-[#1e293b] p-6 md:p-10 rounded-lg shadow-xl border border-gray-700">
                 <header class="text-center mb-8">
                     <h1 class="text-3xl font-extrabold text-[#818cf8] tracking-wide">HACKATHON RESULTS</h1>
@@ -112,12 +112,13 @@
         const resultsTableContainer = document.getElementById('resultsTableContainer');
         const resultsMessage = document.getElementById('resultsMessage');
 
+        // --- IMPORTANT: Set this to your backend URL ---
+        const resultsUrl = 'https://galarc-judge-backend.onrender.com/api/get-results';
+
         async function fetchAndDisplayResults() {
             resultsTableContainer.innerHTML = '<p class="text-center text-gray-500">Loading results...</p>';
             resultsMessage.className = 'text-center mb-4 hidden'; // Reset message
             refreshResultsBtn.disabled = true;
-
-            const resultsUrl = 'https://galarc-judge-backend.onrender.com/api/get-results';
 
             try {
                 const response = await fetch(resultsUrl);
