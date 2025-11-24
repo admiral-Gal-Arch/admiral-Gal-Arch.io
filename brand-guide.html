@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Archives Brand Guide</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- Core Galactic Styles --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0c0a1f;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(129, 140, 248, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(192, 132, 252, 0.15) 0%, transparent 40%),
+                url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="50" cy="50" r="1"/%3E%3Ccircle cx="10" cy="10" r="1"/%3E%3Ccircle cx="90" cy="90" r="1"/%3E%3C/g%3E%3C/svg%3E');
+            color: #e0e7ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        
+        .glow-text {
+            text-shadow: 0 0 8px rgba(129, 140, 248, 0.6), 0 0 12px rgba(167, 139, 250, 0.4);
+        }
+        
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(129, 140, 248, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- Navigation --- */
+        .nav-item {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        .nav-item:hover {
+            background: rgba(129, 140, 248, 0.1);
+            padding-left: 1.25rem;
+        }
+        .nav-item.active {
+            background: linear-gradient(90deg, rgba(129, 140, 248, 0.2), transparent);
+            border-left-color: #818cf8;
+            color: #fff;
+            padding-left: 1.25rem;
+        }
+
+        /* --- Components --- */
+        .color-card {
+            transition: transform 0.3s ease;
+        }
+        .color-card:hover {
+            transform: translateY(-5px);
+            z-index: 10;
+        }
+
+        .hierarchy-node {
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 20;
+        }
+        .hierarchy-node:hover {
+            transform: scale(1.05);
+            border-color: #818cf8;
+            box-shadow: 0 0 20px rgba(129, 140, 248, 0.4);
+            z-index: 50;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section-animate {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* --- Tree Connector Lines --- */
+        .tree-connector {
+            position: absolute;
+            background-color: rgba(129, 140, 248, 0.3);
+            z-index: -1;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-screen overflow-hidden">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-full md:w-72 glass-panel border-r border-indigo-900/50 flex flex-col z-20 shrink-0">
+        <div class="p-6 border-b border-indigo-900/50">
+            <h1 class="font-orbitron text-xl font-bold text-white tracking-widest glow-text">GALACTIC<br>ARCHIVES</h1>
+            <p class="text-xs text-indigo-400 mt-1 uppercase tracking-wider">Brand Guidelines v1.0</p>
+        </div>
+        
+        <nav class="flex-1 overflow-y-auto py-4 space-y-1">
+            <div class="nav-item active px-6 py-3 text-indigo-200 font-medium" onclick="showSection('mission')">Mission & Values</div>
+            <div class="nav-item px-6 py-3 text-indigo-200 font-medium" onclick="showSection('visual')">Visual Identity</div>
+            <div class="nav-item px-6 py-3 text-indigo-200 font-medium" onclick="showSection('typography')">Typography</div>
+            <div class="nav-item px-6 py-3 text-indigo-200 font-medium" onclick="showSection('ui')">UI Effects</div>
+            <div class="nav-item px-6 py-3 text-indigo-200 font-medium" onclick="showSection('voice')">Voice: Stella Command</div>
+            <div class="nav-item px-6 py-3 text-indigo-200 font-medium" onclick="showSection('logo')">The Wordmark</div>
+            <div class="nav-item px-6 py-3 text-indigo-200 font-medium" onclick="showSection('hierarchy')">Galactic Hierarchy</div>
+        </nav>
+
+        <div class="p-4 border-t border-indigo-900/50 text-center">
+            <button onclick="window.print()" class="text-xs text-indigo-400 hover:text-white transition-colors">
+                <i class="fas fa-print mr-2"></i> Print / Export to PDF
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 overflow-y-auto relative p-4 md:p-8 lg:p-12 scroll-smooth" id="main-content">
+        
+        <!-- SECTION 1: Mission Statement & Values -->
+        <section id="mission" class="section-animate max-w-5xl mx-auto space-y-12">
+            <header class="border-b border-indigo-800/50 pb-6">
+                <h2 class="font-orbitron text-4xl font-bold text-white mb-2">Mission Statement and Values</h2>
+                <p class="text-indigo-300">The philosophical core of the Galactic Archives.</p>
+            </header>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 space-y-8">
+                    <div class="glass-panel p-6 rounded-lg">
+                        <h3 class="text-indigo-400 uppercase text-sm font-bold tracking-wider mb-2">Why it is important</h3>
+                        <p class="text-gray-300">Our mission statement isn't just a tagline; it's the "North Star" for all participants. It sets the tone of serious exploration mixed with the excitement of the unknown.</p>
+                    </div>
+
+                    <div>
+                        <h3 class="font-orbitron text-xl text-white mb-4">The Mission</h3>
+                        <div class="glass-panel p-8 rounded-xl border-l-4 border-indigo-500 relative overflow-hidden">
+                            <div class="absolute -right-10 -top-10 w-32 h-32 bg-indigo-500 rounded-full blur-3xl opacity-20"></div>
+                            <p class="font-orbitron text-2xl md:text-3xl leading-relaxed text-white text-center italic">
+                                "To venture into the vast cosmic data streams of NASA and SpaceX, analyze the unknown, and build groundbreaking applications. We explore the Final Data Frontier."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="font-orbitron text-xl text-white mb-4">Core Values</h3>
+                        <div class="grid gap-4">
+                            <!-- Value 01 -->
+                            <div class="flex items-start glass-panel p-5 rounded-lg">
+                                <span class="font-orbitron text-4xl text-indigo-500/50 font-bold mr-4">01</span>
+                                <div>
+                                    <h4 class="font-orbitron text-xl text-white mb-1">Exploration</h4>
+                                    <p class="text-indigo-200">We don't just consume data; we map it.</p>
+                                </div>
+                            </div>
+                            <!-- Value 02 -->
+                            <div class="flex items-start glass-panel p-5 rounded-lg">
+                                <span class="font-orbitron text-4xl text-indigo-500/50 font-bold mr-4">02</span>
+                                <div>
+                                    <h4 class="font-orbitron text-xl text-white mb-1">Immersion</h4>
+                                    <p class="text-indigo-200">Treat code as starship operations.</p>
+                                </div>
+                            </div>
+                            <!-- Value 03 -->
+                            <div class="flex items-start glass-panel p-5 rounded-lg">
+                                <span class="font-orbitron text-4xl text-indigo-500/50 font-bold mr-4">03</span>
+                                <div>
+                                    <h4 class="font-orbitron text-xl text-white mb-1">Innovation</h4>
+                                    <p class="text-indigo-200">Combine disparate data for novel utility.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar Guidelines -->
+                <div class="glass-panel p-6 rounded-lg h-fit">
+                    <h3 class="font-orbitron text-lg text-white mb-4">Usage Guidelines</h3>
+                    
+                    <div class="mb-6">
+                        <h4 class="text-green-400 font-bold mb-2"><i class="fas fa-check mr-2"></i>Do</h4>
+                        <ul class="text-sm text-indigo-200 space-y-2 list-disc list-inside">
+                            <li>Use the Mission Statement on all landing pages.</li>
+                            <li>Reference values during judging criteria explanations.</li>
+                            <li>Keep the tone awe-inspiring.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-red-400 font-bold mb-2"><i class="fas fa-times mr-2"></i>Don't</h4>
+                        <ul class="text-sm text-indigo-200 space-y-2 list-disc list-inside">
+                            <li>Don't alter the wording of the mission statement.</li>
+                            <li>Don't use corporate "business-speak" (e.g., "synergy").</li>
+                            <li>Don't separate the values from their numbers.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Clarification for User: Contextual Placements -->
+            <div class="mt-12">
+                <h3 class="font-orbitron text-xl text-white mb-2">Primary Application Touchpoints</h3>
+                <p class="text-indigo-300 text-sm mb-4">These are the specific locations where the Mission Statement and Core Values MUST be visibly integrated to ensure brand alignment.</p>
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Website Hero</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Deck Slide 1</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">T-Shirt Back</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Discord Welcome</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Judge's Packet</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Social Bio</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: Visual Identity -->
+        <section id="visual" class="hidden section-animate max-w-5xl mx-auto space-y-12">
+            <header class="border-b border-indigo-800/50 pb-6">
+                <h2 class="font-orbitron text-4xl font-bold text-white mb-2">Visual Identity: The Palette</h2>
+                <p class="text-indigo-300">Colors from the depths of space to the heart of a star.</p>
+            </header>
+
+            <div class="glass-panel p-6 rounded-lg mb-8">
+                <h3 class="text-indigo-400 uppercase text-sm font-bold tracking-wider mb-2">Why it is important</h3>
+                <p class="text-gray-300">Our palette balances the deep darkness of the void with the high-energy luminosity of technology and stars. Strict adherence ensures the UI remains readable while feeling immersive.</p>
+            </div>
+
+            <!-- Color Swatches -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                <!-- Deep Space -->
+                <div class="color-card">
+                    <div class="h-32 w-full rounded-t-lg bg-[#0c0a1f] border border-gray-700"></div>
+                    <div class="glass-panel p-3 rounded-b-lg border-t-0">
+                        <strong class="block text-white mb-1">Deep Space</strong>
+                        <div class="text-[10px] text-gray-400 space-y-0.5 font-mono">
+                            <div>HEX: #0c0a1f</div>
+                            <div>RGB: 12, 10, 31</div>
+                            <div>HSL: 246, 51%, 8%</div>
+                            <div>CMYK: 61, 68, 0, 88</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Void Slate -->
+                <div class="color-card">
+                    <div class="h-32 w-full rounded-t-lg bg-[#0f172a] border border-gray-700"></div>
+                    <div class="glass-panel p-3 rounded-b-lg border-t-0">
+                        <strong class="block text-white mb-1">Void Slate</strong>
+                        <div class="text-[10px] text-gray-400 space-y-0.5 font-mono">
+                            <div>HEX: #0f172a</div>
+                            <div>RGB: 15, 23, 42</div>
+                            <div>HSL: 222, 47%, 11%</div>
+                            <div>CMYK: 64, 45, 0, 84</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Indigo -->
+                <div class="color-card">
+                    <div class="h-32 w-full rounded-t-lg bg-[#818cf8]"></div>
+                    <div class="glass-panel p-3 rounded-b-lg border-t-0">
+                        <strong class="block text-white mb-1">Indigo</strong>
+                        <div class="text-[10px] text-gray-400 space-y-0.5 font-mono">
+                            <div>HEX: #818cf8</div>
+                            <div>RGB: 129, 140, 248</div>
+                            <div>HSL: 234, 89%, 74%</div>
+                            <div>CMYK: 48, 44, 0, 3</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Violet -->
+                <div class="color-card">
+                    <div class="h-32 w-full rounded-t-lg bg-[#c084fc]"></div>
+                    <div class="glass-panel p-3 rounded-b-lg border-t-0">
+                        <strong class="block text-white mb-1">Violet</strong>
+                        <div class="text-[10px] text-gray-400 space-y-0.5 font-mono">
+                            <div>HEX: #c084fc</div>
+                            <div>RGB: 192, 132, 252</div>
+                            <div>HSL: 270, 95%, 75%</div>
+                            <div>CMYK: 24, 48, 0, 1</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Starlight -->
+                <div class="color-card">
+                    <div class="h-32 w-full rounded-t-lg bg-[#e0e7ff] text-black flex items-center justify-center text-xs">Primary Text</div>
+                    <div class="glass-panel p-3 rounded-b-lg border-t-0">
+                        <strong class="block text-white mb-1">Starlight</strong>
+                        <div class="text-[10px] text-gray-400 space-y-0.5 font-mono">
+                            <div>HEX: #e0e7ff</div>
+                            <div>RGB: 224, 231, 255</div>
+                            <div>HSL: 226, 100%, 94%</div>
+                            <div>CMYK: 12, 9, 0, 0</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Gold -->
+                <div class="color-card">
+                    <div class="h-32 w-full rounded-t-lg bg-[#D4AF37]"></div>
+                    <div class="glass-panel p-3 rounded-b-lg border-t-0">
+                        <strong class="block text-white mb-1">Gold</strong>
+                        <div class="text-[10px] text-gray-400 space-y-0.5 font-mono">
+                            <div>HEX: #D4AF37</div>
+                            <div>RGB: 212, 175, 55</div>
+                            <div>HSL: 46, 65%, 52%</div>
+                            <div>CMYK: 0, 17, 74, 17</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Application Visuals -->
+            <div class="mt-12">
+                <h3 class="font-orbitron text-xl text-white mb-2">Usage Examples</h3>
+                <p class="text-indigo-300 text-sm mb-4">Applying the palette to specific UI elements.</p>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="glass-panel h-24 rounded flex items-center justify-center bg-[#0c0a1f] border border-[#818cf8]">
+                        <span class="text-[#e0e7ff] font-orbitron">Backgrounds</span>
+                    </div>
+                    <div class="glass-panel h-24 rounded flex items-center justify-center" style="background: linear-gradient(90deg, #818cf8, #c084fc);">
+                        <span class="text-white font-bold font-orbitron">Buttons/Gradients</span>
+                    </div>
+                    <div class="glass-panel h-24 rounded flex items-center justify-center bg-[#0f172a] border-l-4 border-[#D4AF37]">
+                        <span class="text-[#D4AF37] font-bold">Rank/Awards</span>
+                    </div>
+                    <div class="glass-panel h-24 rounded flex items-center justify-center border border-[#818cf8]/30 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-[#818cf8] opacity-10"></div>
+                        <span class="text-[#e0e7ff] z-10 glow-text font-orbitron">Headlines</span>
+                    </div>
+                </div>
+            </div>
+            
+             <div class="grid md:grid-cols-2 gap-8 mt-8">
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-green-400 font-bold mb-2"><i class="fas fa-check mr-2"></i>Do</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Use Deep Space (#0c0a1f) for main backgrounds.</li>
+                        <li>Use Indigo/Violet gradients for primary actions.</li>
+                        <li>Use Gold sparingly for ranks and winners.</li>
+                    </ul>
+                </div>
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-red-400 font-bold mb-2"><i class="fas fa-times mr-2"></i>Don't</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Avoid pure black (#000000); use Void Slate or Deep Space.</li>
+                        <li>Don't mix Gold with the Violet gradients directly.</li>
+                        <li>Don't use low-contrast text on the dark background.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: Typography -->
+        <section id="typography" class="hidden section-animate max-w-5xl mx-auto space-y-12">
+            <header class="border-b border-indigo-800/50 pb-6">
+                <h2 class="font-orbitron text-4xl font-bold text-white mb-2">Typography</h2>
+                <p class="text-indigo-300">The language of the machine and the logbook.</p>
+            </header>
+
+            <div class="glass-panel p-6 rounded-lg">
+                <h3 class="text-indigo-400 uppercase text-sm font-bold tracking-wider mb-2">Why it is important</h3>
+                <p class="text-gray-300">Our typography distinguishes the "Human" element (Inter) from the "Machine/Space" element (Orbitron). This contrast creates a futuristic HUD (Heads-Up Display) aesthetic.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Floating Box Content -->
+                <div class="glass-panel p-8 rounded-xl shadow-2xl border border-indigo-500/30 transform hover:scale-[1.01] transition-transform">
+                    <div class="flex justify-between items-start mb-6 border-b border-indigo-500/30 pb-4">
+                        <div>
+                            <span class="text-xs text-indigo-400 uppercase tracking-widest">Display Font</span>
+                            <h2 class="font-orbitron text-4xl text-white font-bold mt-1">ORBITRON</h2>
+                        </div>
+                        <span class="text-5xl font-orbitron text-indigo-500/20">Aa</span>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <p class="text-indigo-200 text-sm mb-2"><strong class="text-white">Usage:</strong> Titles, Ranks, Countdowns, Buttons</p>
+                        <p class="text-indigo-200 text-sm"><strong class="text-white">Placement:</strong> Headers (H1-H3), Navigation Links, Rank Badges</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="font-orbitron font-bold text-2xl text-white">THE QUICK BROWN FOX JUMPS...</p>
+                        <p class="font-orbitron font-bold text-xl text-white">1234567890</p>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-xl shadow-2xl border border-indigo-500/30 transform hover:scale-[1.01] transition-transform">
+                     <div class="flex justify-between items-start mb-6 border-b border-indigo-500/30 pb-4">
+                        <div>
+                            <span class="text-xs text-indigo-400 uppercase tracking-widest">Body Copy</span>
+                            <h2 class="font-sans text-4xl text-white font-bold mt-1">Inter</h2>
+                        </div>
+                        <span class="text-5xl font-sans text-indigo-500/20">Aa</span>
+                    </div>
+                    
+                    <div class="mb-6">
+                         <p class="text-indigo-200 text-sm mb-2"><strong class="text-white">Description:</strong> Inter is used for high legibility in documentation and paragraphs. It provides a clean contrast to the geometric display font.</p>
+                        <p class="text-indigo-200 text-sm"><strong class="text-white">Usage:</strong> Paragraphs, Instructions, Form Labels, Footer Text</p>
+                    </div>
+
+                    <div class="space-y-2">
+                        <p class="font-sans text-white text-lg">The quick brown fox jumps over the lazy dog.</p>
+                        <p class="font-sans text-indigo-300">Reading long documentation requires a font that is easy on the eyes and scales well on all devices.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <h3 class="font-orbitron text-xl text-white mb-2">Common Use Cases</h3>
+                <p class="text-indigo-300 text-sm mb-4">Standard assignments for each font family.</p>
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Main Headers</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Nav Items</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Buttons</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Form Inputs</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Rules Text</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Email Body</div>
+                </div>
+            </div>
+
+             <div class="grid md:grid-cols-2 gap-8 mt-8">
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-green-400 font-bold mb-2"><i class="fas fa-check mr-2"></i>Do</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Use Orbitron in uppercase for maximum impact.</li>
+                        <li>Add ample line-height (1.6) to Inter paragraphs.</li>
+                        <li>Use the glow effect on Orbitron titles.</li>
+                    </ul>
+                </div>
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-red-400 font-bold mb-2"><i class="fas fa-times mr-2"></i>Don't</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Don't use Orbitron for long paragraphs (hard to read).</li>
+                        <li>Don't make Inter bold unless it's a sub-header.</li>
+                        <li>Don't mix more than these two font families.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: UI Effects -->
+        <section id="ui" class="hidden section-animate max-w-5xl mx-auto space-y-12">
+            <header class="border-b border-indigo-800/50 pb-6">
+                <h2 class="font-orbitron text-4xl font-bold text-white mb-2">UI Effects</h2>
+                <p class="text-indigo-300">Immersive textures: Glass, Neon, and the Void.</p>
+            </header>
+
+            <div class="glass-panel p-6 rounded-lg">
+                <h3 class="text-indigo-400 uppercase text-sm font-bold tracking-wider mb-2">Why it is important</h3>
+                <p class="text-gray-300">The interface should feel like a futuristic console floating in zero-gravity. Glassmorphism provides depth without clutter, while neon glows guide user attention to critical actions.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Glassmorphism -->
+                <div>
+                    <h3 class="font-orbitron text-2xl text-white mb-4">Glassmorphism</h3>
+                    <div class="relative bg-[url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80')] bg-cover rounded-xl p-10 overflow-hidden">
+                        <div class="glass-panel p-6 rounded-xl border border-white/10 relative z-10">
+                            <h4 class="font-orbitron text-white text-lg">Container</h4>
+                            <p class="text-indigo-100 text-sm mt-2">Containers float above the void. High blur, low opacity background, subtle white border.</p>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm text-indigo-300">
+                        <p><strong>Code Concept:</strong> <code class="bg-indigo-900/50 px-1 rounded">backdrop-filter: blur(10px); background: rgba(17, 24, 39, 0.6);</code></p>
+                    </div>
+                </div>
+
+                <!-- CTA Button -->
+                <div>
+                    <h3 class="font-orbitron text-2xl text-white mb-4">CTA Buttons</h3>
+                    <div class="glass-panel p-10 rounded-xl flex flex-col items-center justify-center space-y-6">
+                        <button class="font-orbitron font-bold text-white px-8 py-3 rounded-full uppercase tracking-wider transition-transform transform hover:-translate-y-1" 
+                                style="background: linear-gradient(90deg, #818cf8, #c084fc); box-shadow: 0 0 15px rgba(167, 139, 250, 0.4);">
+                            Register Now
+                        </button>
+                        <p class="text-indigo-200 text-sm text-center">Gradient (Indigo to Violet) + Glow Shadow + Hover Lift.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <h3 class="font-orbitron text-xl text-white mb-2">Component Library Checklist</h3>
+                <p class="text-indigo-300 text-sm mb-4">Where to apply these specific effects.</p>
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Cards</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Modals</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Form Fields</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Primary Actions</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Nav Bars</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Tooltips</div>
+                </div>
+            </div>
+
+             <div class="grid md:grid-cols-2 gap-8 mt-8">
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-green-400 font-bold mb-2"><i class="fas fa-check mr-2"></i>Do</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Ensure content inside glass cards has high contrast.</li>
+                        <li>Use the "glow" text-shadow on headlines.</li>
+                        <li>Round corners (1rem/16px) for organic feel.</li>
+                    </ul>
+                </div>
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-red-400 font-bold mb-2"><i class="fas fa-times mr-2"></i>Don't</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Don't use flat colors for primary buttons.</li>
+                        <li>Don't make the glass background too opaque (>80%).</li>
+                        <li>Don't apply shadows to text inside body paragraphs.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: Voice -->
+        <section id="voice" class="hidden section-animate max-w-5xl mx-auto space-y-12">
+            <header class="border-b border-indigo-800/50 pb-6">
+                <h2 class="font-orbitron text-4xl font-bold text-white mb-2">Voice: "Stella Command"</h2>
+                <p class="text-indigo-300">Authoritative, Inspiring, and Immersive.</p>
+            </header>
+
+            <div class="glass-panel p-6 rounded-lg">
+                <h3 class="text-indigo-400 uppercase text-sm font-bold tracking-wider mb-2">Why it is important</h3>
+                <p class="text-gray-300">We are not just organizing an event; we are running a mission. The voice should feel like a briefing from a futuristic space command. It keeps participants engaged in the "game" of the hackathon.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-orbitron text-xl text-white mb-4">Tone Characteristics</h3>
+                    <ul class="space-y-3">
+                        <li class="glass-panel p-4 rounded-lg border-l-4 border-indigo-500">
+                            <strong class="text-white block">Brief & Direct</strong>
+                            <span class="text-indigo-300 text-sm">Military precision. Avoid fluff. Information is vital telemetry.</span>
+                        </li>
+                        <li class="glass-panel p-4 rounded-lg border-l-4 border-violet-500">
+                            <strong class="text-white block">Inspiring</strong>
+                            <span class="text-indigo-300 text-sm">References to the "unknown," "frontier," and "voyage."</span>
+                        </li>
+                        <li class="glass-panel p-4 rounded-lg border-l-4 border-indigo-500">
+                            <strong class="text-white block">Inclusive</strong>
+                            <span class="text-indigo-300 text-sm">Everyone is a "Cadet" or "Explorer." Rank is earned, but respect is given.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                     <h3 class="font-orbitron text-xl text-white mb-4">Case Study: The Error Message</h3>
+                     <div class="space-y-4">
+                         <div class="bg-red-900/20 p-4 rounded border border-red-500/30">
+                             <p class="text-xs text-red-400 uppercase font-bold">Standard (Boring)</p>
+                             <p class="text-gray-300 mt-1">"Error 404: Page not found. Please go back."</p>
+                         </div>
+                         <div class="bg-green-900/20 p-4 rounded border border-green-500/30">
+                             <p class="text-xs text-green-400 uppercase font-bold">Stella Command (Brand)</p>
+                             <p class="text-white mt-1 font-orbitron">"Communications Lost."</p>
+                             <p class="text-indigo-200 text-sm">"We cannot locate that sector in the archives. Telemetry indicates you have drifted off course. Return to base immediately."</p>
+                         </div>
+                     </div>
+
+                     <h3 class="font-orbitron text-xl text-white mb-4 mt-6">Case Study: Registration Success</h3>
+                      <div class="bg-green-900/20 p-4 rounded border border-green-500/30">
+                             <p class="text-xs text-green-400 uppercase font-bold">Stella Command (Brand)</p>
+                             <p class="text-indigo-200 text-sm">"Clearance Code Accepted. Welcome to the Fleet, Cadet. Your mission briefing has been encrypted and sent to your inbox. Prepare for launch."</p>
+                         </div>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <h3 class="font-orbitron text-xl text-white mb-2">Communication Channels</h3>
+                <p class="text-indigo-300 text-sm mb-4">Apply this voice consistently across these platforms.</p>
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Emails</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Discord Announcements</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Judge Feedback</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Website Copy</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Social Posts</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Event Scripts</div>
+                </div>
+            </div>
+
+             <div class="grid md:grid-cols-2 gap-8 mt-8">
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-green-400 font-bold mb-2"><i class="fas fa-check mr-2"></i>Do</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Refer to the team as "Stella Command" or "The Fleet".</li>
+                        <li>Use space metaphors (Launch, Orbit, Trajectory).</li>
+                        <li>Sign off messages with "End Transmission" or "Ad Astra".</li>
+                    </ul>
+                </div>
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-red-400 font-bold mb-2"><i class="fas fa-times mr-2"></i>Don't</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Don't sound robotic or unfeeling; we are human explorers.</li>
+                        <li>Don't overuse jargon to the point of confusion.</li>
+                        <li>Don't refer to participants as "users" or "customers".</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: The Logo Wordmark -->
+        <section id="logo" class="hidden section-animate max-w-5xl mx-auto space-y-12">
+            <header class="border-b border-indigo-800/50 pb-6">
+                <h2 class="font-orbitron text-4xl font-bold text-white mb-2">The Logo Wordmark</h2>
+                <p class="text-indigo-300">The seal of the Galactic Archives.</p>
+            </header>
+
+            <div class="glass-panel p-6 rounded-lg">
+                <h3 class="text-indigo-400 uppercase text-sm font-bold tracking-wider mb-2">Why it is important</h3>
+                <p class="text-gray-300">The wordmark is the primary identifier. It must be legible, impactful, and always presented with the correct spacing and glow effects to maintain authority.</p>
+            </div>
+
+            <!-- The Logo Display -->
+            <div class="glass-panel p-16 rounded-xl flex items-center justify-center bg-[#0c0a1f] border-2 border-dashed border-indigo-900/50 relative">
+                <!-- Safe space indicators -->
+                <div class="absolute top-4 left-4 border-l border-t border-indigo-500 w-4 h-4"></div>
+                <div class="absolute top-4 right-4 border-r border-t border-indigo-500 w-4 h-4"></div>
+                <div class="absolute bottom-4 left-4 border-l border-b border-indigo-500 w-4 h-4"></div>
+                <div class="absolute bottom-4 right-4 border-r border-b border-indigo-500 w-4 h-4"></div>
+                
+                <h1 class="font-orbitron text-4xl md:text-6xl font-bold text-white tracking-widest glow-text text-center">
+                    THE GALACTIC<br>ARCHIVES
+                </h1>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-orbitron text-xl text-white mb-4">Construction & Best Practices</h3>
+                    <ul class="space-y-2 text-indigo-200 text-sm">
+                        <li><strong>Font:</strong> Orbitron Bold (700 or 900).</li>
+                        <li><strong>Case:</strong> Always UPPERCASE.</li>
+                        <li><strong>Tracking:</strong> Wide letter-spacing (0.1em or 'tracking-widest').</li>
+                        <li><strong>Color:</strong> Pure White (#FFFFFF) with Indigo/Violet glow shadow.</li>
+                        <li><strong>Line Break:</strong> Preferred break after "GALACTIC" for square formats.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-orbitron text-xl text-white mb-4">Restrictions</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-panel p-2 flex items-center justify-center bg-white">
+                            <span class="font-orbitron text-black font-bold text-xs">NO INVERT (BLACK)</span>
+                            <div class="absolute text-red-500 text-4xl font-bold opacity-50">X</div>
+                        </div>
+                         <div class="glass-panel p-2 flex items-center justify-center transform skew-x-12">
+                            <span class="font-orbitron text-white font-bold text-xs">NO DISTORTION</span>
+                             <div class="absolute text-red-500 text-4xl font-bold opacity-50">X</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12">
+                <h3 class="font-orbitron text-xl text-white mb-2">Placement Examples</h3>
+                <p class="text-indigo-300 text-sm mb-4">Standardized placements for high visibility.</p>
+                <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Site Header</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Merchandise</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Social Banners</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Video Intros</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Certificates</div>
+                    <div class="glass-panel p-3 text-center rounded text-xs text-indigo-400 border border-indigo-500/20">Sponsor Decks</div>
+                </div>
+            </div>
+
+             <div class="grid md:grid-cols-2 gap-8 mt-8">
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-green-400 font-bold mb-2"><i class="fas fa-check mr-2"></i>Do</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Always apply the glow effect on digital backgrounds.</li>
+                        <li>Maintain clear space equal to the height of the "G".</li>
+                        <li>Center align text when stacked.</li>
+                    </ul>
+                </div>
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-red-400 font-bold mb-2"><i class="fas fa-times mr-2"></i>Don't</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Don't change the font to Inter or Arial.</li>
+                        <li>Don't use gradients on the text fill itself (only background/glow).</li>
+                        <li>Don't lower opacity below 100%.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: Galactic Hierarchy -->
+        <section id="hierarchy" class="hidden section-animate max-w-6xl mx-auto space-y-12 pb-20">
+            <header class="border-b border-indigo-800/50 pb-6">
+                <h2 class="font-orbitron text-4xl font-bold text-white mb-2">Galactic Hierarchy</h2>
+                <p class="text-indigo-300">The chain of command for Stella Command and the Student Fleet. Click a rank for details.</p>
+            </header>
+
+            <div class="glass-panel p-6 rounded-lg mb-8">
+                <h3 class="text-indigo-400 uppercase text-sm font-bold tracking-wider mb-2">Why it is important</h3>
+                <p class="text-gray-300">Gamification is key to our brand. The hierarchy provides a clear progression path for students and a structured organization for the staff. It turns a standard hackathon into a role-playing event.</p>
+            </div>
+
+            <!-- ORGANIZATIONAL TREE VISUALIZATION -->
+            <div class="relative w-full overflow-x-auto p-4 min-h-[800px] flex justify-center">
+                <div class="flex flex-col items-center space-y-12 w-max relative">
+                    
+                    <!-- Level 1: Admiral -->
+                    <div class="flex flex-col items-center z-10">
+                        <div class="hierarchy-node cursor-pointer glass-panel border border-[#D4AF37] p-4 rounded-lg w-48 text-center bg-[#0c0a1f] flex flex-col items-center" onclick="openModal('admiral')">
+                            <div class="w-16 h-16 mb-2">
+                                <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#D4AF37">
+                                    <rect x="15" y="30" width="70" height="40" rx="5" stroke="#D4AF37" stroke-width="3" fill="#111827" />
+                                    <circle cx="30" cy="50" r="9"/>
+                                    <circle cx="50" cy="50" r="9"/>
+                                    <circle cx="70" cy="50" r="9"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-orbitron text-[#D4AF37] font-bold">Admiral</h3>
+                        </div>
+                        <!-- Connector down -->
+                        <div class="h-12 w-0.5 bg-indigo-500/50"></div>
+                    </div>
+
+                    <!-- Level 2: Vice Admiral -->
+                    <div class="flex flex-col items-center z-10">
+                        <div class="hierarchy-node cursor-pointer glass-panel border border-[#D4AF37] p-4 rounded-lg w-48 text-center bg-[#0c0a1f] flex flex-col items-center" onclick="openModal('vice_admiral')">
+                            <div class="w-12 h-12 mb-2">
+                                <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#D4AF37">
+                                    <rect x="15" y="30" width="70" height="40" rx="5" stroke="#D4AF37" stroke-width="3" fill="#111827" />
+                                    <circle cx="38" cy="50" r="9"/>
+                                    <circle cx="62" cy="50" r="9"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-orbitron text-[#D4AF37] font-bold text-sm">Vice Admiral</h3>
+                        </div>
+                         <!-- Connector down to spread -->
+                         <div class="h-8 w-0.5 bg-indigo-500/50"></div>
+                         <!-- Horizontal Bar -->
+                         <div class="h-0.5 bg-indigo-500/50 w-[700px]"></div>
+                         <!-- Vertical Connectors for Level 3 -->
+                         <div class="flex justify-between w-[700px] -mt-0.5 px-4">
+                             <div class="h-8 w-0.5 bg-indigo-500/50"></div> <!-- Left (Chief) -->
+                             <div class="h-8 w-0.5 bg-indigo-500/50"></div> <!-- Center (Comms) -->
+                             <div class="h-8 w-0.5 bg-indigo-500/50"></div> <!-- Right (Ambassador) -->
+                         </div>
+                    </div>
+
+                    <!-- Level 3: Chiefs -->
+                    <div class="flex justify-between w-[800px] z-10 px-4">
+                        
+                        <!-- LEFT: Chief Engineer Branch -->
+                        <div class="flex flex-col items-center w-1/3">
+                            <div class="hierarchy-node cursor-pointer glass-panel border border-indigo-400 p-3 rounded-lg w-40 text-center flex flex-col items-center" onclick="openModal('chief_engineer')">
+                                <div class="w-10 h-10 mb-1">
+                                    <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
+                                       <path d="M50 15 L20 45 C 20 75, 80 75, 80 45 L50 15Z" fill="#D4AF37"/>
+                                       <g transform="translate(0 -5)" stroke="#111827" stroke-width="6">
+                                           <path d="M50 49 a 11 11 0 1 0 0.001 0 Z M50 39 L50 32 M50 68 L50 59 M65.2 49 L71 49 M29 49 L34.8 49 M60.8 40.2 L64.9 36.1 M35.1 63.9 L39.2 59.8 M60.8 59.8 L64.9 63.9 M35.1 36.1 L39.2 40.2" fill="none"/>
+                                           <path d="M50 49 a 3 3 0 1 0 0.001 0 Z" stroke-width="2.5" />
+                                       </g>
+                                    </svg>
+                                </div>
+                                <h4 class="font-orbitron text-white text-xs">Chief Engineer</h4>
+                            </div>
+                            <div class="h-6 w-0.5 bg-indigo-500/50"></div>
+                            <div class="hierarchy-node cursor-pointer glass-panel border border-indigo-400/50 p-2 rounded-lg w-32 text-center flex flex-col items-center" onclick="openModal('tech_mentor')">
+                                <div class="w-8 h-8 mb-1">
+                                    <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" stroke="white" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M50 15 L20 45 C 20 75, 80 75, 80 45 L50 15Z" fill="#3B82F6" stroke="none"/>
+                                        <path d="M50 35 L52.3 43.2 61.2 45.1 54.6 51.5 56.1 60.3 50 55.8 43.9 60.3 45.4 51.5 38.8 45.1 47.7 43.2 Z" stroke="none" fill="white"/>
+                                    </svg>
+                                </div>
+                                <span class="text-xs text-indigo-300">3x Tech Mentors</span>
+                            </div>
+                        </div>
+
+                        <!-- CENTER: Comms Officer Branch (Student Tree) -->
+                        <div class="flex flex-col items-center w-1/3">
+                            <div class="hierarchy-node cursor-pointer glass-panel border border-indigo-400 p-3 rounded-lg w-44 text-center bg-indigo-900/20 flex flex-col items-center" onclick="openModal('comms')">
+                                <div class="w-10 h-10 mb-1">
+                                     <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
+                                       <path d="M50 15 L20 45 C 20 75, 80 75, 80 45 L50 15Z" fill="#D4AF37"/>
+                                       <g stroke="#111827" stroke-width="5" fill="none">
+                                           <path d="M45 40 a 10 10 0 0 1 10 10" />
+                                           <path d="M45 40 a 20 20 0 0 1 20 20" />
+                                           <path d="M45 40 a 30 30 0 0 1 30 30" />
+                                           <circle cx="45" cy="40" r="4" fill="#111827" stroke="none"/>
+                                       </g>
+                                    </svg>
+                                </div>
+                                <h4 class="font-orbitron text-white text-xs">Comms Officer</h4>
+                            </div>
+                            
+                            <!-- Student Ranks Start Here -->
+                            <div class="h-8 w-0.5 bg-indigo-500/50"></div>
+                            
+                            <!-- Commander -->
+                            <div class="hierarchy-node cursor-pointer glass-panel border border-violet-400 p-3 rounded-lg w-44 text-center flex flex-col items-center" onclick="openModal('commander')">
+                                <div class="w-10 h-10 mb-1">
+                                    <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#D4AF37">
+                                       <circle cx="28" cy="50" r="12"/>
+                                       <circle cx="50" cy="50" r="12"/>
+                                       <circle cx="72" cy="50" r="12"/>
+                                    </svg>
+                                </div>
+                                <h4 class="font-orbitron text-white text-xs">1x Commander</h4>
+                            </div>
+
+                            <div class="h-6 w-0.5 bg-violet-500/50"></div>
+                            <!-- Lt Commanders split -->
+                             <div class="h-0.5 bg-violet-500/50 w-[200px]"></div>
+                             <div class="flex justify-between w-[200px] -mt-0.5">
+                                 <div class="h-6 w-0.5 bg-violet-500/50"></div>
+                                 <div class="h-6 w-0.5 bg-violet-500/50"></div>
+                             </div>
+
+                             <div class="flex justify-between w-[220px] mt-0">
+                                 <!-- Left Lt Cmdr Branch -->
+                                 <div class="flex flex-col items-center">
+                                     <div class="hierarchy-node cursor-pointer glass-panel border border-violet-400/70 p-2 rounded-lg w-24 text-center flex flex-col items-center" onclick="openModal('lt_commander')">
+                                         <div class="w-8 h-8 mb-1">
+                                            <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#D4AF37">
+                                               <circle cx="28" cy="50" r="12"/>
+                                               <circle cx="50" cy="50" r="12" fill="#111827" stroke="#D4AF37" stroke-width="3"/>
+                                               <circle cx="72" cy="50" r="12"/>
+                                            </svg>
+                                         </div>
+                                         <span class="text-[10px] text-white font-orbitron">Lt. Cmdr</span>
+                                     </div>
+                                      
+                                      <div class="h-4 w-0.5 bg-violet-500/30"></div>
+                                      
+                                      <!-- Clickable Ensign Node -->
+                                      <div class="hierarchy-node cursor-pointer glass-panel border border-violet-500/50 bg-violet-900/20 p-2 rounded text-center w-24 flex flex-col items-center" onclick="openModal('ensign')">
+                                          <div class="w-6 h-6 mb-1">
+                                               <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#D4AF37">
+                                                   <circle cx="50" cy="50" r="12" />
+                                                </svg>
+                                          </div>
+                                          <div class="text-[9px] text-violet-200 font-bold">4x Ensigns</div>
+                                      </div>
+
+                                      <div class="h-4 w-0.5 bg-violet-500/30"></div>
+
+                                      <!-- Clickable Cadet Node -->
+                                      <div class="hierarchy-node cursor-pointer glass-panel border border-violet-500/30 bg-violet-900/10 p-2 rounded text-center w-24 flex flex-col items-center" onclick="openModal('cadet')">
+                                          <div class="w-6 h-6 mb-1">
+                                              <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                                   <path d="M50 15 L20 45 C 20 75, 80 75, 80 45 L50 15Z" stroke="#D4AF37" stroke-width="4" fill="none"/>
+                                                </svg>
+                                          </div>
+                                          <div class="text-[8px] text-violet-400 font-bold">20x Cadets</div>
+                                      </div>
+                                 </div>
+                                 
+                                 <!-- Right Lt Cmdr Branch (Mirror) -->
+                                 <div class="flex flex-col items-center">
+                                     <div class="hierarchy-node cursor-pointer glass-panel border border-violet-400/70 p-2 rounded-lg w-24 text-center flex flex-col items-center" onclick="openModal('lt_commander')">
+                                         <div class="w-8 h-8 mb-1">
+                                            <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#D4AF37">
+                                               <circle cx="28" cy="50" r="12"/>
+                                               <circle cx="50" cy="50" r="12" fill="#111827" stroke="#D4AF37" stroke-width="3"/>
+                                               <circle cx="72" cy="50" r="12"/>
+                                            </svg>
+                                         </div>
+                                         <span class="text-[10px] text-white font-orbitron">Lt. Cmdr</span>
+                                     </div>
+                                      
+                                      <div class="h-4 w-0.5 bg-violet-500/30"></div>
+                                      
+                                      <!-- Clickable Ensign Node -->
+                                      <div class="hierarchy-node cursor-pointer glass-panel border border-violet-500/50 bg-violet-900/20 p-2 rounded text-center w-24 flex flex-col items-center" onclick="openModal('ensign')">
+                                          <div class="w-6 h-6 mb-1">
+                                               <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#D4AF37">
+                                                   <circle cx="50" cy="50" r="12" />
+                                                </svg>
+                                          </div>
+                                          <div class="text-[9px] text-violet-200 font-bold">4x Ensigns</div>
+                                      </div>
+
+                                      <div class="h-4 w-0.5 bg-violet-500/30"></div>
+
+                                      <!-- Clickable Cadet Node -->
+                                      <div class="hierarchy-node cursor-pointer glass-panel border border-violet-500/30 bg-violet-900/10 p-2 rounded text-center w-24 flex flex-col items-center" onclick="openModal('cadet')">
+                                          <div class="w-6 h-6 mb-1">
+                                              <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                                   <path d="M50 15 L20 45 C 20 75, 80 75, 80 45 L50 15Z" stroke="#D4AF37" stroke-width="4" fill="none"/>
+                                                </svg>
+                                          </div>
+                                          <div class="text-[8px] text-violet-400 font-bold">20x Cadets</div>
+                                      </div>
+                                 </div>
+                             </div>
+                        </div>
+
+                        <!-- RIGHT: Ambassador Branch -->
+                        <div class="flex flex-col items-center w-1/3">
+                            <div class="hierarchy-node cursor-pointer glass-panel border border-indigo-400 p-3 rounded-lg w-40 text-center flex flex-col items-center" onclick="openModal('ambassador')">
+                                <div class="w-10 h-10 mb-1">
+                                    <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
+                                       <path d="M50 15 L20 45 C 20 75, 80 75, 80 45 L50 15Z" fill="#c42d2d"/>
+                                       <g stroke="#FFFFFF" stroke-width="4.5" fill="none">
+                                           <path d="M40 58 L52 48 L60 58"/>
+                                           <path d="M40 48 L48 58 L60 48"/>
+                                       </g>
+                                    </svg>
+                                </div>
+                                <h4 class="font-orbitron text-white text-xs">Ambassador</h4>
+                            </div>
+                             <div class="h-6 w-0.5 bg-indigo-500/50"></div>
+                            <div class="hierarchy-node cursor-pointer glass-panel border border-indigo-400/50 p-2 rounded-lg w-32 text-center flex flex-col items-center" onclick="openModal('sponsor')">
+                                <div class="w-8 h-8 mb-1">
+                                     <svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M60 25 L40 45 C 40 65, 80 65, 80 45 L60 25Z" fill="#3B82F6"/>
+                                        <path d="M40 55 L20 75 C 20 95, 60 95, 60 75 L40 55Z" fill="#3B82F6"/>
+                                        <path d="M65 48 C 55 58, 50 65, 45 72" stroke="white" stroke-width="4" fill="none" stroke-dasharray="8, 6"/>
+                                    </svg>
+                                </div>
+                                <span class="text-xs text-indigo-300">3-4 Sponsors</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mt-8">
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-green-400 font-bold mb-2"><i class="fas fa-check mr-2"></i>Do</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Use these titles on Discord roles.</li>
+                        <li>Respect the chain of command for issue escalation.</li>
+                        <li>Encourage students to "rank up" via participation.</li>
+                    </ul>
+                </div>
+                 <div class="glass-panel p-6 rounded-lg">
+                    <h4 class="text-red-400 font-bold mb-2"><i class="fas fa-times mr-2"></i>Don't</h4>
+                    <ul class="text-sm text-indigo-200 list-disc list-inside">
+                        <li>Don't create new ranks without Admiral approval.</li>
+                        <li>Don't treat lower ranks poorly; we are a team.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Role Detail Modal -->
+    <div id="roleModal" class="modal hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="glass-panel w-full max-w-lg p-8 rounded-xl relative border border-indigo-500 transform transition-all scale-100">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-indigo-400 hover:text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <h2 id="modalTitle" class="font-orbitron text-3xl font-bold text-white mb-2 glow-text">Rank Title</h2>
+            <h3 id="modalRole" class="text-indigo-400 font-bold uppercase text-sm tracking-wider mb-6">Role Description</h3>
+            
+            <div class="space-y-4">
+                <div class="bg-indigo-900/30 p-6 rounded border border-indigo-500/20">
+                    <p class="text-sm text-gray-400 uppercase font-bold mb-3 border-b border-indigo-500/30 pb-2">Details & Duties</p>
+                    <div id="modalDesc" class="text-indigo-100 leading-relaxed text-sm space-y-2">
+                        <!-- Dynamic Content Loaded Here -->
+                    </div>
+                </div>
+            </div>
+
+             <div class="mt-6 text-center">
+                <button onclick="closeModal()" class="font-orbitron text-xs text-indigo-300 hover:text-white uppercase tracking-widest border-b border-transparent hover:border-white transition-colors pb-1">Close Transmission</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Store for Roles
+        const roleDetails = {
+            'admiral': {
+                title: 'Admiral',
+                role: 'Lead Organizer & Mission Strategist',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Visionary:</strong> Defines the hackathon's core vision, theme, and strategic goals.</li>
+                        <li><strong>Public Face:</strong> Leads relationships with key sponsors (NASA/SpaceX liaisons) and university partners.</li>
+                        <li><strong>Authority:</strong> Holds final veto power on all strategic decisions and budget allocations.</li>
+                        <li><strong>Leadership:</strong> Empowers the crew to succeed and resolves high-level blockers that the Vice Admiral cannot handle.</li>
+                    </ul>`
+            },
+            'vice_admiral': {
+                title: 'Vice Admiral',
+                role: 'Operations Lead & Executive Officer',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Operations:</strong> Oversees and maintains the master 8-week project plan and timeline.</li>
+                        <li><strong>Team Management:</strong> Leads internal team syncs and ensures all departments are on track.</li>
+                        <li><strong>Execution:</strong> Develops the detailed minute-by-minute "Run Sheet" for the live 5-day event.</li>
+                        <li><strong>Crisis Management:</strong> Acts as the primary problem-solver during the live event (fire-fighting).</li>
+                    </ul>`
+            },
+            'chief_engineer': {
+                title: 'Chief Engineer',
+                role: 'Technology Director',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Infrastructure:</strong> Manages the entire technical stack: Website deployment, Discord bot configuration, and Devpost portal.</li>
+                        <li><strong>Judging Logic:</strong> Designs and oversees the technical aspects of the judging algorithm and matrix.</li>
+                        <li><strong>Education:</strong> Coordinates and runs technical workshops for students ("Quick Start" guides).</li>
+                        <li><strong>Support:</strong> leads the troubleshooting of API access issues during the hackathon.</li>
+                    </ul>`
+            },
+            'tech_mentor': {
+                title: 'Technical Mentor',
+                role: 'Subject Matter Expert',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Student Support:</strong> Reports to the Chief Engineer to provide direct code support to student teams.</li>
+                        <li><strong>Workshops:</strong> May lead specific breakout sessions on topics like "Intro to APIs" or "Data Visualization".</li>
+                        <li><strong>Debugging:</strong> helps unblock teams who are stuck on technical challenges during the event.</li>
+                    </ul>`
+            },
+            'ambassador': {
+                title: 'Ambassador',
+                role: 'Head of External Relations',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Partnerships:</strong> Creates the sponsorship prospectus and target list.</li>
+                        <li><strong>Sales:</strong> Leads outreach meetings to secure funding and prizes from industry partners.</li>
+                        <li><strong>VIP Logistics:</strong> Manages guest speakers, judges, and VIP attendees.</li>
+                        <li><strong>Swag:</strong> Coordinates the ordering and delivery of physical swag and hardware to winners.</li>
+                    </ul>`
+            },
+            'sponsor': {
+                title: 'Sponsor',
+                role: 'Partner Organization',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Resource Provider:</strong> External organizations that provide funding, API access, or hardware.</li>
+                        <li><strong>Judging:</strong> Often provides 1-2 judges for the final panel.</li>
+                        <li><strong>Challenges:</strong> May set specific "Side Quests" or bounty challenges for students to solve.</li>
+                    </ul>`
+            },
+            'comms': {
+                title: 'Comms Officer',
+                role: 'Community & Marketing Lead',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Social Media:</strong> Manages all social channels (Twitter/LinkedIn) to build hype.</li>
+                        <li><strong>Communications:</strong> Writes and distributes all mission updates (emails) to the fleet.</li>
+                        <li><strong>Community:</strong> Moderates the Discord server to ensure a positive and inclusive atmosphere.</li>
+                        <li><strong>Events:</strong> Designs and executes the opening and closing ceremony scripts.</li>
+                    </ul>`
+            },
+            'commander': {
+                title: 'Commander',
+                role: 'Elite Student Leader',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Status:</strong> The highest participant rank. 1 position available per event cycle.</li>
+                        <li><strong>Core Trait:</strong> Exemplifies exceptional collaboration and quality of work, regardless of final placement.</li>
+                        <li><strong>Understanding:</strong> Demonstrates a profound mastery of the hackathon's themes and concepts.</li>
+                        <li><strong>Future Path:</strong> Strong candidate for promotion to "Stella Command" staff in the next cycle.</li>
+                    </ul>`
+            },
+            'lt_commander': {
+                title: 'Lt. Commander',
+                role: 'Squad Leader',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Responsibility:</strong> Leads a "Squad" of multiple Ensign-led teams.</li>
+                        <li><strong>Project Management:</strong> Responsible for ensuring their squad submits projects on time.</li>
+                        <li><strong>Progression & Eligibility:</strong> Show great potential in teamwork including some leadership skills.</li>
+                        <li><strong>Guidance:</strong> Ensures all Ensigns are contributing and learning.</li>
+                    </ul>`
+            },
+            'ensign': {
+                title: 'Ensign',
+                role: 'Team Member',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Rank:</strong> The first earned promotion.</li>
+                        <li><strong>Requirement:</strong> Awarded for demonstrating potential and quality through their work.</li>
+                        <li><strong>Duties:</strong> Contributing code, design, or research to the hackathon project.</li>
+                        <li><strong>Next Step:</strong> Demonstrate leadership to earn Lieutenant.</li>
+                    </ul>`
+            },
+            'cadet': {
+                title: 'Cadet',
+                role: 'Recruit',
+                desc: `
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Status:</strong> Entry-level rank assigned upon registration.</li>
+                        <li><strong>Mission:</strong> To find a team, join the Discord, and prepare for launch.</li>
+                        <li><strong>Access:</strong> Basic access to all workshops and general channels.</li>
+                    </ul>`
+            }
+        };
+
+        // Section Switching Logic
+        function showSection(id) {
+            const sections = document.querySelectorAll('main > section');
+            sections.forEach(s => s.classList.add('hidden'));
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(n => n.classList.remove('active'));
+
+            const selected = document.getElementById(id);
+            if(selected) {
+                selected.classList.remove('hidden');
+                selected.classList.remove('section-animate');
+                void selected.offsetWidth; 
+                selected.classList.add('section-animate');
+            }
+
+            const activeNav = document.querySelector(`.nav-item[onclick="showSection('${id}')"]`);
+            if(activeNav) activeNav.classList.add('active');
+            
+            document.getElementById('main-content').scrollTop = 0;
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('roleModal');
+        const mTitle = document.getElementById('modalTitle');
+        const mRole = document.getElementById('modalRole');
+        const mDesc = document.getElementById('modalDesc');
+
+        function openModal(roleKey) {
+            const data = roleDetails[roleKey];
+            if(!data) return;
+
+            mTitle.innerHTML = data.title; // Using innerHTML to allow HTML entities if needed
+            mRole.innerText = data.role;
+            mDesc.innerHTML = data.desc;
+            
+            // Color coding based on rank
+            if(roleKey === 'admiral' || roleKey === 'commander') {
+                mTitle.classList.remove('text-white');
+                mTitle.style.color = '#D4AF37'; // Gold
+            } else {
+                mTitle.style.color = '#FFFFFF';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('mission');
+        });
+    </script>
+</body>
+</html>
