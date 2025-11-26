@@ -13,6 +13,100 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const trackAdviceButtons = document.querySelectorAll('[data-track]');
 
+    // Mission ideas array
+    const missionIdeas = [
+        {
+            title: "Solar Storm Predictor",
+            description: "Build an AI model that analyzes NASA's solar weather data to predict potential solar storms and their impact on Earth's communications systems.",
+            track: "The Astrogator's AI",
+            apis: ["NASA DONKI API", "NASA Solar System API"]
+        },
+        {
+            title: "ISS Tracker Dashboard",
+            description: "Create an interactive real-time visualization showing the ISS location, upcoming flyovers, and crew information with beautiful 3D globe rendering.",
+            track: "The Celestial Cartographer",
+            apis: ["ISS Location API", "NASA Astronaut API"]
+        },
+        {
+            title: "Rocket Launch Countdown",
+            description: "Design an immersive countdown experience for upcoming SpaceX launches with mission details, rocket specs, and live telemetry visualization.",
+            track: "Alien Artifacts Division",
+            apis: ["SpaceX API", "NASA Launch Library"]
+        },
+        {
+            title: "Cosmic Photo Gallery",
+            description: "Build an AI-powered gallery that curates and explains NASA's Astronomy Picture of the Day, with natural language queries and image similarity search.",
+            track: "The Astrogator's AI",
+            apis: ["NASA APOD API", "NASA Image Library"]
+        },
+        {
+            title: "Mars Rover Explorer",
+            description: "Create an interactive timeline and map showing all Mars rover missions, their paths, and the photos they've captured with AR preview capabilities.",
+            track: "The Celestial Cartographer",
+            apis: ["NASA Mars Rover Photos API", "NASA Mars Weather API"]
+        },
+        {
+            title: "Exoplanet Discovery Hub",
+            description: "Visualize the NASA Exoplanet Archive with filterable 3D star maps, planet comparisons, and habitability score calculations.",
+            track: "The Celestial Cartographer",
+            apis: ["NASA Exoplanet Archive API", "SIMBAD Astronomical Database"]
+        },
+        {
+            title: "Launch Success Predictor",
+            description: "Train a machine learning model on historical SpaceX launch data to predict success probability based on weather, payload, and rocket configuration.",
+            track: "The Astrogator's AI",
+            apis: ["SpaceX API", "Weather API"]
+        },
+        {
+            title: "Asteroid Alert System",
+            description: "Build a notification system that tracks Near-Earth Objects (NEOs) and sends alerts about close approaches with risk assessment visualizations.",
+            track: "Alien Artifacts Division",
+            apis: ["NASA NEO API", "NASA SBDB Close Approach API"]
+        },
+        {
+            title: "Space Weather Dashboard",
+            description: "Create a comprehensive dashboard showing solar wind, geomagnetic storms, and radiation levels with historical trends and predictions.",
+            track: "The Celestial Cartographer",
+            apis: ["NASA DONKI API", "NOAA Space Weather API"]
+        },
+        {
+            title: "Satellite Constellation Mapper",
+            description: "Visualize SpaceX Starlink and other satellite constellations in real-time with orbital predictions and coverage area calculations.",
+            track: "Alien Artifacts Division",
+            apis: ["SpaceX API", "N2YO Satellite API"]
+        },
+        {
+            title: "Lunar Mission Planner",
+            description: "Design a tool that helps plan lunar missions by calculating optimal launch windows, trajectories, and landing site conditions.",
+            track: "The Astrogator's AI",
+            apis: ["NASA LRO API", "SpaceX API"]
+        },
+        {
+            title: "Space News Aggregator",
+            description: "Build an AI-curated news feed that aggregates space-related articles, launch updates, and mission announcements with sentiment analysis.",
+            track: "The Astrogator's AI",
+            apis: ["SpaceX API", "NASA News API"]
+        },
+        {
+            title: "Cosmic Sound Experience",
+            description: "Transform space data into audio experiences - sonify solar winds, create music from planetary orbits, or generate ambient sounds from ISS telemetry.",
+            track: "Alien Artifacts Division",
+            apis: ["NASA API", "ISS Location API"]
+        },
+        {
+            title: "Rocket Reusability Tracker",
+            description: "Visualize SpaceX's rocket reusability statistics with core histories, turnaround times, and economic impact calculations.",
+            track: "The Celestial Cartographer",
+            apis: ["SpaceX API"]
+        },
+        {
+            title: "Earth Observation Platform",
+            description: "Create an application that showcases NASA's Earth observation data with before/after comparisons, climate change visualizations, and natural disaster tracking.",
+            track: "The Celestial Cartographer",
+            apis: ["NASA EONET API", "NASA Earth API"]
+        }
+    ];
+
     const callGeminiAPI = async (prompt) => {
         // IMPORTANT: Replace with your actual API key
         const apiKey = "";
@@ -47,32 +141,65 @@ document.addEventListener('DOMContentLoaded', () => {
             ideaLoader.classList.remove('hidden');
             ideaContent.classList.add('hidden');
 
-            const prompt = "You are an inspiring hackathon idea generator. Based on a space-themed hackathon called 'The Galactic Archives' which uses APIs from NASA, SpaceX, and the ISS, generate a unique and creative project idea. The idea should be suitable for one of three tracks: 'The Astrogator\\'s AI', 'The Celestial Cartographer', or 'Alien Artifacts Division'. Format the response as simple HTML with a h4 tag for a catchy title, and p tags for a one-sentence summary, the suggested track, and a brief description of how it would work.";
+            // Simulate loading time
+            await new Promise(resolve => setTimeout(resolve, 500));
 
-            const responseText = await callGeminiAPI(prompt);
+            // Get random mission idea
+            const randomIdea = missionIdeas[Math.floor(Math.random() * missionIdeas.length)];
 
-            ideaContent.innerHTML = responseText;
+            // Format the output
+            const output = `
+                <div class="mb-4">
+                    <h4 class="font-orbitron text-2xl font-bold text-white mb-2">🚀 ${randomIdea.title}</h4>
+                    <div class="text-indigo-400 text-xs uppercase tracking-wider mb-3">Recommended Track: ${randomIdea.track}</div>
+                </div>
+                <div class="mb-4">
+                    <p class="text-indigo-200 leading-relaxed">${randomIdea.description}</p>
+                </div>
+                <div class="mt-4">
+                    <div class="text-indigo-400 text-sm font-semibold mb-2">Suggested APIs:</div>
+                    <div class="flex flex-wrap gap-2">
+                        ${randomIdea.apis.map(api => `<span class="bg-indigo-800/50 px-3 py-1 rounded-full text-xs text-indigo-200">${api}</span>`).join('')}
+                    </div>
+                </div>
+            `;
+
+            ideaContent.innerHTML = output;
             ideaLoader.classList.add('hidden');
             ideaContent.classList.remove('hidden');
         });
     }
 
     const openModal = () => {
-        adviceModal.classList.remove('opacity-0', 'pointer-events-none');
-        modalContentBox.classList.remove('scale-95');
+        if (adviceModal) {
+            adviceModal.classList.remove('opacity-0', 'pointer-events-none');
+        }
+        if (modalContentBox) {
+            modalContentBox.classList.remove('scale-95');
+        }
     };
 
     const closeModal = () => {
-        adviceModal.classList.add('opacity-0', 'pointer-events-none');
-        modalContentBox.classList.add('scale-95');
+        if (adviceModal) {
+            adviceModal.classList.add('opacity-0', 'pointer-events-none');
+        }
+        if (modalContentBox) {
+            modalContentBox.classList.add('scale-95');
+        }
     };
 
     trackAdviceButtons.forEach(button => {
         button.addEventListener('click', async (e) => {
             const track = e.target.dataset.track;
-            modalTitle.textContent = `✨ ${track} Track Advisor`;
-            modalLoader.classList.remove('hidden');
-            modalAdviceContent.classList.add('hidden');
+            if (modalTitle) {
+                modalTitle.textContent = `✨ ${track} Track Advisor`;
+            }
+            if (modalLoader) {
+                modalLoader.classList.remove('hidden');
+            }
+            if (modalAdviceContent) {
+                modalAdviceContent.classList.add('hidden');
+            }
             openModal();
 
             let prompt = "";
@@ -85,18 +212,28 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const responseText = await callGeminiAPI(prompt);
-            modalAdviceContent.innerHTML = responseText;
-            modalLoader.classList.add('hidden');
-            modalAdviceContent.classList.remove('hidden');
+            if (modalAdviceContent) {
+                modalAdviceContent.innerHTML = responseText;
+            }
+            if (modalLoader) {
+                modalLoader.classList.add('hidden');
+            }
+            if (modalAdviceContent) {
+                modalAdviceContent.classList.remove('hidden');
+            }
         });
     });
 
-    closeModalBtn.addEventListener('click', closeModal);
-    adviceModal.addEventListener('click', (e) => {
-        if (e.target === adviceModal) {
-            closeModal();
-        }
-    });
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+    if (adviceModal) {
+        adviceModal.addEventListener('click', (e) => {
+            if (e.target === adviceModal) {
+                closeModal();
+            }
+        });
+    }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -190,66 +327,79 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.getElementById('submit-button');
     
     function populateInstitutions() {
-        universitySelect.innerHTML = '<option value="" disabled selected>Select your institution</option>';
-        institutions.forEach(inst => {
-            const option = document.createElement('option');
-            option.value = inst;
-            option.textContent = inst;
-            universitySelect.appendChild(option);
-        });
+        if (universitySelect) {
+            universitySelect.innerHTML = '<option value="" disabled selected>Select your institution</option>';
+            institutions.forEach(inst => {
+                const option = document.createElement('option');
+                option.value = inst;
+                option.textContent = inst;
+                universitySelect.appendChild(option);
+            });
+        }
     }
 
     function validateEmail() {
-        const emailValue = emailInput.value.trim();
-        if (emailValue === '' || emailValue.endsWith('.ac.uk')) {
-            emailError.classList.add('hidden');
-            return true;
-        } else {
-            emailError.classList.remove('hidden');
-            return false;
+        if (emailInput) {
+            const emailValue = emailInput.value.trim();
+            if (emailValue === '' || emailValue.endsWith('.ac.uk')) {
+                if (emailError) emailError.classList.add('hidden');
+                return true;
+            } else {
+                if (emailError) emailError.classList.remove('hidden');
+                return false;
+            }
         }
+        return true;
     }
     
     function hideMessages() {
-        successMessage.classList.add('hidden');
-        genericErrorMessage.classList.add('hidden');
-        emailError.classList.add('hidden');
+        if (successMessage) successMessage.classList.add('hidden');
+        if (genericErrorMessage) genericErrorMessage.classList.add('hidden');
+        if (emailError) emailError.classList.add('hidden');
     }
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        hideMessages();
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            hideMessages();
 
-        const isEmailValid = validateEmail();
-        const isFullNameValid = fullNameInput.value.trim() !== '';
-        const isUniversityValid = universitySelect.value !== '';
-        
-        if (isEmailValid && isFullNameValid && isUniversityValid) {
-            submitButton.disabled = true;
-            submitButton.textContent = "Registering...";
+            const isEmailValid = validateEmail();
+            const isFullNameValid = fullNameInput && fullNameInput.value.trim() !== '';
+            const isUniversityValid = universitySelect && universitySelect.value !== '';
             
-            // Simulate a successful network request
-            setTimeout(() => {
-                console.log('Form submitted with:', {
-                    fullName: fullNameInput.value,
-                    email: emailInput.value,
-                    university: universitySelect.value
-                });
+            if (isEmailValid && isFullNameValid && isUniversityValid) {
+                if (submitButton) {
+                    submitButton.disabled = true;
+                    submitButton.textContent = "Registering...";
+                }
+                
+                // Simulate a successful network request
+                setTimeout(() => {
+                    console.log('Form submitted with:', {
+                        fullName: fullNameInput.value,
+                        email: emailInput.value,
+                        university: universitySelect.value
+                    });
 
-                successMessage.classList.remove('hidden');
-                form.reset();
-                submitButton.disabled = false;
-                submitButton.textContent = "Register Now";
-            }, 1500);
+                    if (successMessage) successMessage.classList.remove('hidden');
+                    form.reset();
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.textContent = "Register Now";
+                    }
+                }, 1500);
 
-        } else {
-            errorText.textContent = "Please fill out all fields correctly and try again.";
-            genericErrorMessage.classList.remove('hidden');
-            if (!isEmailValid) emailError.classList.remove('hidden');
-        }
-    });
+            } else {
+                if (errorText) errorText.textContent = "Please fill out all fields correctly and try again.";
+                if (genericErrorMessage) genericErrorMessage.classList.remove('hidden');
+                if (!isEmailValid && emailError) emailError.classList.remove('hidden');
+            }
+        });
+    }
     
-    emailInput.addEventListener('input', validateEmail);
+    if (emailInput) {
+        emailInput.addEventListener('input', validateEmail);
+    }
 
     // Initial setup
     populateInstitutions();
